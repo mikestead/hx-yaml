@@ -1,6 +1,6 @@
 # Overview
 
-A cross platform [Yaml](http://www.yaml.org/) parser and renderer for Haxe. Ported from the fast and feature rich
+A cross platform [YAML](http://www.yaml.org/) parser and renderer for Haxe. Ported from the fast and feature rich
 [js-yaml](https://github.com/nodeca/js-yaml).
 
 > Requires Neko 2.0+ when used under the Neko runtime due to its support for Unicode based regular expressions.
@@ -43,8 +43,7 @@ A cross platform [Yaml](http://www.yaml.org/) parser and renderer for Haxe. Port
 ## Supported YAML types
 
 The list of standard YAML tags and corresponding Haxe types. See also
-[YAML tag discussion](http://pyyaml.org/wiki/YAMLTagDiscussion) and
-[YAML types repository](http://yaml.org/type/).
+[YAML types](http://yaml.org/type/).
 
 ```
 !!null ''                   # null
