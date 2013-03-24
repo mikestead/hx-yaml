@@ -7,13 +7,7 @@ A cross platform [Yaml](http://www.yaml.org/) parser and renderer for Haxe. Port
 
 ### Installation
 
-Install hx-yaml from haxelib:
-
-	haxelib install yaml
-
-Or if you want to install the latest directly from github:
-
-	haxelib git hx-yaml https://github.com/mikestead/hx-yaml.git src
+- *Still in development, not ready for public use just yet.*
 	
 ## API
 	
