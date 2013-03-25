@@ -59,3 +59,7 @@ The list of standard YAML tags and corresponding Haxe types. See also
 !!seq [ ... ]               # Array
 !!map { ... }               # Map
 ```
+
+## License
+
+MIT - [See LICENSE](https://github.com/mikestead/hx-yaml/blob/master/LICENSE) 

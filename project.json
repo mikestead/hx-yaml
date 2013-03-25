@@ -1,0 +1,13 @@
+{
+	"project":
+	{
+		"name": "hx-yaml",
+		"version": "1.0.0",
+		"id": "yaml"
+	},
+	"dependencies":
+	{
+		"mcore":"1.x",
+		"msys":"1.x"
+	}
+}

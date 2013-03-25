@@ -1,11 +1,11 @@
 package yaml;
 
-import haxe.io.Bytes;
-import yaml.schema.DefaultSchema;
-import mcore.util.Iterables;
-import yaml.YamlType;
-import yaml.schema.SafeSchema;
 import haxe.Utf8;
+import haxe.io.Bytes;
+import yaml.YamlType;
+import yaml.schema.DefaultSchema;
+import yaml.schema.SafeSchema;
+import mcore.util.Iterables;
 import mcore.util.Strings;
 import mcore.util.Ints;
 
@@ -343,16 +343,17 @@ class Renderer
 
 		if ('object' == kind)
 		{
-			if (block && !Iterables.isEmpty(result)) 
+			var map:StringMap<Dynamic> = cast object;
+			if (block && !Iterables.isEmpty(map)) 
 			{
-				writeBlockMapping(level, result, compact);
+				writeBlockMapping(level, map, compact);
 			}
-			else 
+			else
 			{
-				writeFlowMapping(level, result);
+				writeFlowMapping(level, map);
 			}
-		} 
-		else if ('array' == kind) 
+		}
+		else if ('array' == kind)
 		{
 			if (block && (0 != result.length))
 			{

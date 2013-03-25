@@ -21,8 +21,8 @@ class YamlTest
 	{
 		var data:StringMap<Dynamic> = cast Yaml.parse(smallSample);
 		
-		for (key in data.keys())
-			trace(key + "::" + data.get(key));
+//		for (key in data.keys())
+//			trace(key + "::" + data.get(key));
 		
 		trace(Yaml.render(data));
 
