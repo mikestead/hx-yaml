@@ -51,8 +51,9 @@ class TTimestamp extends YamlType<Date, String>
 			while (f.length < 3) { // milli-seconds
 				f += '0';
 			}
+			
 			fraction = Std.parseInt(f);
-
+			
 			if (YAML_TIMESTAMP_REGEXP.matched(9) != null)
 			{
 				var tz_hour = Std.parseInt(YAML_TIMESTAMP_REGEXP.matched(10));
@@ -69,19 +70,44 @@ class TTimestamp extends YamlType<Date, String>
 		}
 		catch(e:Dynamic)  {}
 
-		//TODO(mike): Need to work out how we can do cross platform UTC date creation
-//		return new Date(Date.UTC(year, month, day, hour, minute, second, fraction));
+		#if (js || flash)
+		var stamp:Float = nativeDate().UTC(year, month, day, hour, minute, second, fraction);
+		
+		if (delta != 0)
+			stamp = stamp - delta;
+			
+		return Date.fromTime(stamp);
+		
+		#else
+		trace("warn", "UTC dates are not supported under this target");
+		
 		var date = new Date(year, month, day, hour, minute, second);
-//		if (delta != 0)
-//			date.setTime(data.getTime() - delta);
+		// if (delta != 0)
+		// 	stamp = stamp - delta;
 		return date;
+		#end
 	}
+
+	#if (flash || js)
+	static function nativeDate():Dynamic
+	{
+		#if flash9
+		return untyped __global__["Date"];
+		#elseif flash
+		return untyped _global["Date"];
+		#elseif js
+		return untyped __js__("Date");
+		#end
+		return null;
+	}
+	#end
 
 	override public function represent(object:Date, ?style:String):String
 	{
 		#if (flash || js)
 		return mcore.util.Dates.toISOString(object);
 		#else
+		trace("warn", "UTC dates are not supported under this target");
 		return object.toString(); // TODO work out how to grab utc time stamp
 		#end
 		

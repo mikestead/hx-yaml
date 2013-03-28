@@ -7,7 +7,7 @@
 	},
 	"dependencies":
 	{
-		"mcore":"1.x",
+		"mcore":"master",
 		"msys":"1.x"
 	}
 }

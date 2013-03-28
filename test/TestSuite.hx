@@ -9,6 +9,7 @@ import yaml.type.TNullTest;
 import yaml.type.TOmapTest;
 import yaml.type.TPairsTest;
 import yaml.type.TSetTest;
+import yaml.type.TTimestampTest;
 import yaml.YamlTest;
 
 /**
@@ -32,6 +33,7 @@ class TestSuite extends massive.munit.TestSuite
 		add(yaml.type.TOmapTest);
 		add(yaml.type.TPairsTest);
 		add(yaml.type.TSetTest);
+		add(yaml.type.TTimestampTest);
 		add(yaml.YamlTest);
 	}
 }
