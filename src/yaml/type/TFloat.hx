@@ -25,7 +25,7 @@ class TFloat extends yaml.StringYamlType<Null<Float>>
 		var value:String = StringTools.replace(object, '_', '').toLowerCase();
 		var sign = ('-' == value.charAt(0)) ? -1 : 1;
 	
-		if (0 <= '+-'.indexOf(value.charAt(0))) 
+		if (0 <= '+-'.indexOf(value.charAt(0)))
 		{
 			value = value.substr(1);
 		}

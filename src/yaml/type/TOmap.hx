@@ -11,10 +11,10 @@ class TOmap extends yaml.YamlType<Array<StringMap<Dynamic>>, Array<StringMap<Dyn
 	}
 
 	// For omap this method is only doing a validation that no duplicates are present and that
-	// each pair has only one key, it's not really 'resolving' the value.
+	// each pair has only one key. It's not really 'resolving' the value...
 	override public function resolve(object:Array<StringMap<Dynamic>>, ?explicit:Bool = false):Array<StringMap<Dynamic>>
 	{
-		var objectKeys = [];
+		var objectKeys = new StringMap();
 		
 		for (pair in object)
 		{
@@ -22,34 +22,31 @@ class TOmap extends yaml.YamlType<Array<StringMap<Dynamic>>, Array<StringMap<Dyn
 			var pairKey:String = null;
 			
 			if (!Std.is(pair, StringMap))
-//			if (Type.typeof(pair) != ValueType.TObject)
 			{
-				trace("A " + Type.typeof(pair));
 				cantResolveType();
 			}
 			
 			for (key in pair.keys())
-//			for (key in Reflect.fields(pair))
 			{
 				if (pairKey == null)
+				{
 					pairKey = key;
+				}
 				else
 				{
-					trace("B");
 					cantResolveType(); // can only have one key
 				}
 			}
 	
 			if (pairKey == null) // must have a key
 			{
-				trace("C");
 				cantResolveType();
 			}
 	
-			if (Iterables.contains(objectKeys, pairKey))
+			if (objectKeys.exists(pairKey))
 				cantResolveType(); // no duplicate keys allowed
 			else
-				objectKeys.push(pairKey);
+				objectKeys.set(pairKey, null);
 		}
 
 		return object;

@@ -1,5 +1,14 @@
 import massive.munit.TestSuite;
 
+import yaml.type.TBinaryTest;
+import yaml.type.TBoolTest;
+import yaml.type.TFloatTest;
+import yaml.type.TIntTest;
+import yaml.type.TMergeTest;
+import yaml.type.TNullTest;
+import yaml.type.TOmapTest;
+import yaml.type.TPairsTest;
+import yaml.type.TSetTest;
 import yaml.YamlTest;
 
 /**
@@ -14,6 +23,15 @@ class TestSuite extends massive.munit.TestSuite
 	{
 		super();
 
+		add(yaml.type.TBinaryTest);
+		add(yaml.type.TBoolTest);
+		add(yaml.type.TFloatTest);
+		add(yaml.type.TIntTest);
+		add(yaml.type.TMergeTest);
+		add(yaml.type.TNullTest);
+		add(yaml.type.TOmapTest);
+		add(yaml.type.TPairsTest);
+		add(yaml.type.TSetTest);
 		add(yaml.YamlTest);
 	}
 }

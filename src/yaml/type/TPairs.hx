@@ -16,13 +16,11 @@ class TPairs extends YamlType<Array<Array<Dynamic>>,Array<StringMap<Dynamic>>>
 		
 		for (pair in object)
 		{
-//			if (Type.typeof(pair) != ValueType.TObject)
 			if (!Std.is(pair, StringMap))
 				cantResolveType();
 
 			var fieldCount = 0;
 			var keyPair:String = null;
-//			for (key in Reflect.fields(pair))
 			for (key in pair.keys())
 			{
 				keyPair = key;

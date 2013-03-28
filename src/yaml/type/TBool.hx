@@ -1,5 +1,6 @@
 package yaml.type;
 
+import yaml.YamlException;
 import yaml.YamlType;
 
 class TBool extends StringYamlType<Bool>
@@ -79,8 +80,8 @@ class TBool extends StringYamlType<Bool>
 	{
 		return switch (style)
 		{
-			case "uppercase": object ? 'true' : 'false';
-			case "lowercase": object ? 'TRUE' : 'FALSE';
+			case "uppercase": object ? 'TRUE' : 'FALSE';
+			case "lowercase": object ? 'true' : 'false';
 			case "camelcase": object ? 'True' : 'False';
 			default: 
 				throw new YamlException("Style not supported: " + style);
