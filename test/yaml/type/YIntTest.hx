@@ -2,16 +2,16 @@ package yaml.type;
 
 import massive.munit.Assert;
 
-class TIntTest
+class YIntTest
 {
 	static inline var CONST:Int = 685230;
 
-	var type:TInt;
+	var type:YInt;
 
 	@Before
     public function before()
 	{
-		type = new TInt();
+		type = new YInt();
 	}
 
 	@Test

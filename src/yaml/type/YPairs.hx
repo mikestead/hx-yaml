@@ -3,7 +3,7 @@ package yaml.type;
 import yaml.YamlType;
 import Type;
 
-class TPairs extends YamlType<Array<Array<Dynamic>>,Array<StringMap<Dynamic>>>
+class YPairs extends YamlType<Array<Array<Dynamic>>,Array<StringMap<Dynamic>>>
 {
     public function new()
 	{
@@ -30,7 +30,6 @@ class TPairs extends YamlType<Array<Array<Dynamic>>,Array<StringMap<Dynamic>>>
 			if (fieldCount != 1) // must have one key
 				cantResolveType();
 
-//			result.push([keyPair, Reflect.field(pair, keyPair)]);
 			result.push([keyPair, pair.get(keyPair)]);
 		}
 

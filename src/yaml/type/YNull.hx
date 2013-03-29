@@ -2,7 +2,7 @@ package yaml.type;
 
 import yaml.YamlType;
 
-class TNull extends yaml.StringYamlType<Dynamic>
+class YNull extends yaml.StringYamlType<Dynamic>
 {
 	static var YAML_NULL_MAP:StringMap<Bool> = {
 		var hash = new StringMap<Bool>();

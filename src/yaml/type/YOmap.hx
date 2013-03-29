@@ -1,9 +1,8 @@
 package yaml.type;
 
-import mcore.util.Iterables;
 import Type;
 
-class TOmap extends yaml.YamlType<Array<StringMap<Dynamic>>, Array<StringMap<Dynamic>>>
+class YOmap extends yaml.YamlType<Array<StringMap<Dynamic>>, Array<StringMap<Dynamic>>>
 {
     public function new()
 	{

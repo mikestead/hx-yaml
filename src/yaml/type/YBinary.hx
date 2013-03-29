@@ -4,7 +4,7 @@ import haxe.io.Bytes;
 import haxe.Utf8;
 import yaml.YamlType;
 
-class TBinary extends yaml.StringYamlType<Bytes>
+class YBinary extends yaml.StringYamlType<Bytes>
 {
 	static inline var BASE64_PADDING_CODE = 0x3D;
 	static inline var BASE64_PADDING_CHAR = '=';
@@ -24,15 +24,11 @@ class TBinary extends yaml.StringYamlType<Bytes>
 	
 	public function new()
 	{
-		super('tag:yaml.org,2002:binary', {kind:"string"}, {kind:"object", instanceOf:Bytes});
+		super('tag:yaml.org,2002:binary', {kind:"string"}, {kind:"binary", instanceOf:Bytes});
 	}
 
 	override public function resolve(object:String, ?explicit:Bool):Bytes
 	{
-		#if sys
-		object = Utf8.encode(object); // just in case it's not encoded already.
-		#end
-		
 		var length = Utf8.length(object);
 		var idx = 0;
 		var result = [];
@@ -118,9 +114,6 @@ class TBinary extends yaml.StringYamlType<Bytes>
 			}
 		}
 		
-		#if sys
-		result = Utf8.encode(result);
-		#end
 		return result;
 	}
 }

@@ -2,7 +2,7 @@ package yaml.type;
 
 import yaml.YamlType;
 
-class TSeq extends StringYamlType<Array<Dynamic>>
+class YSeq extends StringYamlType<Array<Dynamic>>
 {
     public function new()
 	{

@@ -2,7 +2,7 @@ package yaml.type;
 
 import yaml.YamlType;
 
-class TMap extends yaml.StringYamlType<StringMap<Dynamic>>
+class YMap extends yaml.StringYamlType<StringMap<Dynamic>>
 {
     public function new()
 	{

@@ -3,14 +3,14 @@ package yaml.type;
 import yaml.YamlType;
 import massive.munit.Assert;
 
-class TFloatTest
+class YFloatTest
 {
-	var type:TFloat;
+	var type:YFloat;
 
 	@Before
     public function before()
 	{
-		type = new TFloat();
+		type = new YFloat();
 	}
 
 	@Test

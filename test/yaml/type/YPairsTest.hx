@@ -3,14 +3,14 @@ package yaml.type;
 import yaml.YamlType;
 import massive.munit.Assert;
 
-class TPairsTest
+class YPairsTest
 {
-	var type:TPairs;
+	var type:YPairs;
 
 	@Before
 	public function before()
 	{
-		type = new TPairs();
+		type = new YPairs();
 	}
 
 	@Test

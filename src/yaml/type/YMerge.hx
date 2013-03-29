@@ -2,7 +2,7 @@ package yaml.type;
 
 import yaml.YamlType;
 
-class TMerge extends yaml.StringYamlType<String>
+class YMerge extends yaml.StringYamlType<String>
 {
     public function new()
 	{

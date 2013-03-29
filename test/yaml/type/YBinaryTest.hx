@@ -2,14 +2,13 @@ package yaml.type;
 
 import haxe.io.Bytes;
 import massive.munit.Assert;
-import mcore.crypto.Base64;
 
-class TBinaryTest
+class YBinaryTest
 {
 	@Test
 	public function shouldResolveAndRepresentBinary()
 	{
-		var type = new TBinary();
+		var type = new YBinary();
 		var data:Bytes = cast type.resolve(createValue());
 		Assert.areEqual(createValue(), type.represent(data));
 	}

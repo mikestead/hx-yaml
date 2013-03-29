@@ -3,14 +3,14 @@ package yaml.type;
 import yaml.YamlType;
 import massive.munit.Assert;
 
-class TBoolTest
+class YBoolTest
 {
 	var type:AnyYamlType;
 
 	@Before
 	public function before()
 	{
-		type = new TBool();
+		type = new YBool();
 	}
 	
 	@Test

@@ -3,7 +3,7 @@ package yaml.type;
 import yaml.YamlType;
 
 //class TTimestamp extends StringYamlType<Date>
-class TTimestamp extends YamlType<Date, String>
+class YTimestamp extends YamlType<Date, String>
 {
 	static var YAML_TIMESTAMP_REGEXP = new EReg(
 		'^([0-9][0-9][0-9][0-9])'          + // [1] year
@@ -28,38 +28,58 @@ class TTimestamp extends YamlType<Date, String>
 			cantResolveType();
 
 		// match: [1] year [2] month [3] day
-		var year = 0;
-		var month = 0;
-		var day = 0;
-		var hour = 0;
-		var minute = 0;
-		var second = 0;
-		var fraction = 0;
-		var delta = 0;
+		var year:Null<Int> = 0;
+		var month:Null<Int> = 0;
+		var day:Null<Int> = 0;
+		var hour:Null<Int> = 0;
+		var minute:Null<Int> = 0;
+		var second:Null<Int> = 0;
+		var fraction:Null<Int> = 0;
+		var delta:Null<Int> = 0;
 
 		try 
 		{
 			year = Std.parseInt(YAML_TIMESTAMP_REGEXP.matched(1));
 			month = Std.parseInt(YAML_TIMESTAMP_REGEXP.matched(2)) - 1; // month starts with 0
 			day = Std.parseInt(YAML_TIMESTAMP_REGEXP.matched(3));
-
 			hour = Std.parseInt(YAML_TIMESTAMP_REGEXP.matched(4));
 			minute = Std.parseInt(YAML_TIMESTAMP_REGEXP.matched(5));
 			second = Std.parseInt(YAML_TIMESTAMP_REGEXP.matched(6));
+			
+			// EReg.matched doesn't throw exception under neko for whatever reason so we need to
+			// check for null on each matched call
+			var matched = -1;
+			if (year == null) matched = year = 0;
+			if (month == null) matched = month = 0;
+			if (day == null) matched = day = 0;
+			if (hour == null) matched = hour = 0;
+			if (minute == null) matched = minute = 0;
+			if (second == null) matched = second = 0;
+			
+			if (matched == 0)
+				throw "Nothing left to match";
 
-			var f = YAML_TIMESTAMP_REGEXP.matched(7).substring(0, 3);
-			while (f.length < 3) { // milli-seconds
+			var msecs = YAML_TIMESTAMP_REGEXP.matched(7);
+			if (msecs == null) 
+				throw "Nothing left to match";
+			
+			var f = msecs.substring(0, 3);
+			while (f.length < 3)
 				f += '0';
-			}
 			
 			fraction = Std.parseInt(f);
 			
 			if (YAML_TIMESTAMP_REGEXP.matched(9) != null)
 			{
-				var tz_hour = Std.parseInt(YAML_TIMESTAMP_REGEXP.matched(10));
-				var tz_minute = 0;
+				var tz_hour:Null<Int> = Std.parseInt(YAML_TIMESTAMP_REGEXP.matched(10));
+				if (tz_hour == null)
+					throw "Nothing left to match";
+				
+				var tz_minute:Null<Int> = 0;
 				try {
 					tz_minute = Std.parseInt(YAML_TIMESTAMP_REGEXP.matched(11));
+					if (tz_minute == null)
+						tz_minute = 0;
 				}
 				catch(e:Dynamic) {}
 			
@@ -79,7 +99,7 @@ class TTimestamp extends YamlType<Date, String>
 		return Date.fromTime(stamp);
 		
 		#else
-		trace("warn", "UTC dates are not supported under this target");
+		trace("Warning: UTC dates are not supported under this target");
 		
 		var date = new Date(year, month, day, hour, minute, second);
 		// if (delta != 0)
@@ -107,8 +127,8 @@ class TTimestamp extends YamlType<Date, String>
 		#if (flash || js)
 		return mcore.util.Dates.toISOString(object);
 		#else
-		trace("warn", "UTC dates are not supported under this target");
-		return object.toString(); // TODO work out how to grab utc time stamp
+		trace("Warning: UTC dates are not supported under this target");
+		return object.toString();
 		#end
 		
 	}

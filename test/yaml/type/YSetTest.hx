@@ -3,12 +3,12 @@ package yaml.type;
 import yaml.YamlType;
 import massive.munit.Assert;
 
-class TSetTest
+class YSetTest
 {
 	@Test
     public function shouldOnlyAllowNullValuesInMaps()
 	{
-		var type = new TSet();
+		var type = new YSet();
 		var map = new StringMap();
 		map.set("key", "value");
 		
@@ -24,7 +24,7 @@ class TSetTest
 	@Test
 	public function shouldAllowMapsWithNullValue()
 	{
-		var type = new TSet();
+		var type = new YSet();
 		var map = new StringMap();
 		map.set("key", null);
 		

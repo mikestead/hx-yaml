@@ -8,6 +8,6 @@
 	"dependencies":
 	{
 		"mcore":"master",
-		"msys":"1.x"
+		"msys":"master"
 	}
 }

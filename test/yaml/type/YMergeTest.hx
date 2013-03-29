@@ -3,12 +3,12 @@ import yaml.YamlType;
 
 import massive.munit.Assert;
 
-class TMergeTest
+class YMergeTest
 {
 	@Test
     public function shouldResolveMerge()
 	{
-		var type = new TMerge();
+		var type = new YMerge();
 		Assert.areEqual("<<", type.resolve("<<"));
 		
 		try {

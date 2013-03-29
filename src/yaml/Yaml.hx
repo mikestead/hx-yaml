@@ -28,10 +28,10 @@ class Yaml
 	
 	@return The parsed yaml document in object form.
 	*/
-//	public static function read(filePath:String, ?options:ParserOptions):Dynamic
-//	{
-//		return parse(msys.File.read(filePath), options);
-//	}
+	public static function read(filePath:String, ?options:ParserOptions):Dynamic
+	{
+		return parse(sys.io.File.getContent(filePath), options);
+	}
 	#end
 
 	/**
@@ -53,13 +53,13 @@ class Yaml
 	Render an object graph as a yaml document and write it to disk.
 	
 	@param data         The root object to render.
-	@param filePath     The path to write the yaml file.
+	@param filePath     The path to write the yaml document.
 	@param ?options     Rendering options (optional).
 	*/
-//	public static function write(data:Dynamic, filePath:String, ?options:RenderOptions):Void
-//	{
-//		msys.File.write(filePath, render(data, options));
-//	}
+	public static function write(data:Dynamic, filePath:String, ?options:RenderOptions):Void
+	{
+		sys.io.File.saveContent(filePath, render(data, options));
+	}
 	#end
 	
     private function new() {}

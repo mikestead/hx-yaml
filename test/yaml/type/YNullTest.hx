@@ -3,14 +3,14 @@ package yaml.type;
 import yaml.YamlType;
 import massive.munit.Assert;
 
-class TNullTest
+class YNullTest
 {
-	var type:TNull;
+	var type:YNull;
 
 	@Before
     public function before()
 	{
-		type = new TNull();
+		type = new YNull();
 	}
 
 	@Test

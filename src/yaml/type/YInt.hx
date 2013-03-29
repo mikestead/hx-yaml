@@ -4,7 +4,7 @@ import yaml.YamlException;
 import mcore.util.Ints;
 import yaml.YamlType;
 
-class TInt extends yaml.StringYamlType<Null<Int>>
+class YInt extends yaml.StringYamlType<Null<Int>>
 {
 	static var YAML_INTEGER_PATTERN = new EReg(
 				'^(?:[-+]?0b[0-1_]+' +

@@ -2,16 +2,16 @@ package yaml.type;
 
 import massive.munit.Assert;
 
-class TTimestampTest
+class YTimestampTest
 {
 	static inline var STAMP:Float = 1008385183100;
 
-	var type:TTimestamp;
+	var type:YTimestamp;
 
 	@Before
     public function before()
 	{
-		type = new TTimestamp();
+		type = new YTimestamp();
 	}
 
 	#if !(js || flash)

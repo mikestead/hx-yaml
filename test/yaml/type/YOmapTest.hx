@@ -3,14 +3,14 @@ package yaml.type;
 import yaml.YamlType;
 import massive.munit.Assert;
 
-class TOmapTest
+class YOmapTest
 {
-	var type:TOmap;
+	var type:YOmap;
 
 	@Before
 	public function before()
 	{
-		type = new TOmap();
+		type = new YOmap();
 	}
 
 	@Test

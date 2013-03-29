@@ -2,11 +2,9 @@
 -main TestMain
 -lib munit
 -lib hamcrest
--lib msys
--lib mcore
 -cp src
-#-resource resource/sample.yaml@sample_yaml
--resource resource/small_sample.yaml@ss
+#-resource resource/small_sample.yaml@ss
+-resource resource/sample.yaml@ss
 
 -cp test
 -swf-version 9
@@ -18,11 +16,9 @@
 -main TestMain
 -lib munit
 -lib hamcrest
--lib msys
--lib mcore
 -cp src
--resource resource/sample.yaml@sample_yaml
--resource resource/small_sample.yaml@small_sample_yaml
+#-resource resource/small_sample.yaml@ss
+-resource resource/sample.yaml@ss
 
 -cp test
 -swf-version 8
@@ -34,11 +30,9 @@
 -main TestMain
 -lib munit
 -lib hamcrest
--lib msys
--lib mcore
 -cp src
-#-resource resource/small_sample.yaml@small_sample_yaml
--resource resource/small_sample.yaml@ss
+#-resource resource/small_sample.yaml@ss
+-resource resource/sample.yaml@ss
 
 -cp test
 -js bin/js_test.js
@@ -49,11 +43,9 @@
 -main TestMain
 -lib munit
 -lib hamcrest
--lib msys
--lib mcore
 -cp src
-#-resource resource/small_sample.yaml@small_sample_yaml
--resource resource/small_sample.yaml@ss
+#-resource resource/small_sample.yaml@ss
+-resource resource/sample.yaml@ss
 
 -cp test
 -neko bin/neko_test.n
@@ -64,11 +56,9 @@
 -main TestMain
 -lib munit
 -lib hamcrest
--lib msys
--lib mcore
 -cp src
--resource resource/sample.yaml@sample_yaml
--resource resource/small_sample.yaml@small_sample_yaml
+#-resource resource/small_sample.yaml@ss
+-resource resource/sample.yaml@ss
 
 -cp test
 #-D HXCPP_M64

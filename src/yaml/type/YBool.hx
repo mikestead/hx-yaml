@@ -3,7 +3,7 @@ package yaml.type;
 import yaml.YamlException;
 import yaml.YamlType;
 
-class TBool extends StringYamlType<Bool>
+class YBool extends StringYamlType<Bool>
 {
 	static var YAML_IMPLICIT_BOOLEAN_MAP:StringMap<Bool> =
 	{

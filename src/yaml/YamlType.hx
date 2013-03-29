@@ -1,15 +1,14 @@
 package yaml;
 
 import haxe.PosInfos;
-import mcore.exception.MissingImplementationException;
 
-typedef LoadOptions = 
+typedef POptions = 
 {
 	?kind:String,
 	?skip:Bool
 }
 
-typedef DumpOptions = 
+typedef ROptions = 
 {
 	?kind:String,
 	?defaultStyle:String,
@@ -25,10 +24,10 @@ typedef StringYamlType<T> = YamlType<T, String>;
 class YamlType<T, D>
 {
 	public var tag:String;
-	public var loader:LoadOptions;
-	public var dumper:DumpOptions;
+	public var loader:POptions;
+	public var dumper:ROptions;
 	
-    public function new(tag:String, loaderOptions:LoadOptions, dumperOptions:DumpOptions)
+    public function new(tag:String, loaderOptions:POptions, dumperOptions:ROptions)
 	{
 		if (loaderOptions == null && dumperOptions == null)
 			throw new YamlException('Incomplete YAML type definition. "loader" or "dumper" setting must be specified.');
@@ -86,6 +85,7 @@ class YamlType<T, D>
 			'string'    != dumper.kind &&
 			'array'     != dumper.kind &&
 			'object'    != dumper.kind &&
+			'binary'    != dumper.kind &&
 			'function'  != dumper.kind)
 		{
 			throw new YamlException('Unacceptable "kind" setting of a type dumper: ' + dumper.kind);

@@ -1,19 +1,18 @@
 package yaml;
 
-import mcore.util.Iterables;
 import yaml.YamlType;
 
 class Schema
 {
 	public static var DEFAULT:Schema;
-
-	public var implicit:Array<AnyYamlType>;
-	public var explicit:Array<AnyYamlType>;
-	public var include:Array<Schema>;
 	
 	public var compiledImplicit:Array<AnyYamlType>;
 	public var compiledExplicit:Array<AnyYamlType>;
 	public var compiledTypeMap:StringMap<AnyYamlType>;
+
+	public var implicit:Array<AnyYamlType>;
+	public var explicit:Array<AnyYamlType>;
+	public var include:Array<Schema>;
 	
 	public function new(include:Array<Schema>, explicit:Array<AnyYamlType>, ?implicit:Array<AnyYamlType>)
 	{
@@ -54,13 +53,6 @@ class Schema
 			result = compileList(includedSchema, name, result);
 		}
 
-//		schema[name].forEach(function (currenAnyYamlType) {
-//			result.forEach(function (previousType, previousIndex) {
-//				if (previousType.tag === currenAnyYamlType.tag) {
-//					exclude.push(previousIndex);
-//				}
-//			});
-
 		var types:Array<AnyYamlType> = switch (name)
 		{
 			case "implicit": schema.implicit;
@@ -81,14 +73,9 @@ class Schema
 			result.push(currenYamlType);
 		}
 		
-		
-//		return result.filter(function (type, index) {
-//			return -1 === exclude.indexOf(index);
-//		});
-		
 		var filteredResult:Array<AnyYamlType> = [];
 		for (i in 0...result.length)
-			if (!Iterables.contains(exclude, i))
+			if (!Lambda.has(exclude, i))
 				filteredResult.push(result[i]);
 		
 		return filteredResult;

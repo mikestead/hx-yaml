@@ -1,8 +1,9 @@
 package yaml.type;
 
 import yaml.YamlType;
+import mcore.util.Floats;
 
-class TFloat extends yaml.StringYamlType<Null<Float>>
+class YFloat extends yaml.StringYamlType<Null<Float>>
 {
 	static var YAML_FLOAT_PATTERN = new EReg(
 		'^(?:[-+]?(?:[0-9][0-9_]*)\\.[0-9_]*(?:[eE][-+][0-9]+)?' +
@@ -21,7 +22,6 @@ class TFloat extends yaml.StringYamlType<Null<Float>>
 		if (!YAML_FLOAT_PATTERN.match(object)) 
 			cantResolveType();
 		
-//		var value  = object.replace(/_/g, '').toLowerCase();
 		var value:String = StringTools.replace(object, '_', '').toLowerCase();
 		var sign = ('-' == value.charAt(0)) ? -1 : 1;
 	
@@ -99,7 +99,7 @@ class TFloat extends yaml.StringYamlType<Null<Float>>
 		} 
 		else 
 		{
-			return Std.string(object);
+			return Floats.toString(object);
 		}
 	}
 }

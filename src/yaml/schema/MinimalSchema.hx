@@ -1,14 +1,14 @@
 package yaml.schema;
 
-import yaml.type.TSeq;
-import yaml.type.TMap;
-import yaml.type.TString;
+import yaml.type.YSeq;
+import yaml.type.YMap;
+import yaml.type.YString;
 import yaml.Schema;
 
 class MinimalSchema extends Schema
 {
     public function new()
 	{
-		super([], [new TString(), new TSeq(), new TMap()]);
+		super([], [new YString(), new YSeq(), new YMap()]);
 	}
 }

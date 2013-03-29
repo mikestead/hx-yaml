@@ -5,7 +5,6 @@ import haxe.io.Bytes;
 import yaml.YamlType;
 import yaml.schema.DefaultSchema;
 import yaml.schema.SafeSchema;
-import mcore.util.Iterables;
 import mcore.util.Strings;
 import mcore.util.Ints;
 
@@ -18,11 +17,12 @@ class RenderOptions
 	public var flowLevel:Int;
 	public var styles:StringMap<String>;
 
-	public function new(?indent:Int = 2, ?flowLevel:Int = -1, ?schema:Schema)
+	public function new(?indent:Int = 2, ?flowLevel:Int = -1, ?schema:Schema, ?styles:StringMap<String>)
 	{
 		this.indent = indent;
 		this.flowLevel = flowLevel;
 		this.schema = (schema != null) ? schema : new DefaultSchema();
+		this.styles = styles;
 	}
 }
 
@@ -60,6 +60,7 @@ class Renderer
 		explicitTypes = schema.compiledExplicit;
 
 		writeNode(0, input, true, true);
+		
 		return result + '\n';
 	}
 	
@@ -74,8 +75,11 @@ class Renderer
 		{
 			try
 			{
-				type.resolve(object, false);
-				return true;
+				if (!type.loader.skip)
+				{
+					type.resolve(object, false);
+					return true;
+				}
 			}
 			catch(e:ResolveTypeException) {}
 		}
@@ -85,6 +89,10 @@ class Renderer
 
 	function writeScalar(object:String)
 	{
+		#if sys
+		object = Utf8.encode(object);
+		#end
+		
 		var isQuoted = false;
 		var checkpoint = 0;
 		var position = -1;
@@ -92,15 +100,16 @@ class Renderer
 		result = '';
 
 		if (0 == object.length || 
-			CHAR_SPACE == object.charCodeAt(0) || 
-			CHAR_SPACE == object.charCodeAt(object.length - 1)) 
+			CHAR_SPACE == Utf8.charCodeAt(object, 0) || 
+			CHAR_SPACE == Utf8.charCodeAt(object, Utf8.length(object) - 1)) 
 		{
 			isQuoted = true;
 		}
 
-		while (++position < object.length)
+		var length = Utf8.length(object);
+		while (++position < length)
 		{
-			var character = object.charCodeAt(position);
+			var character = Utf8.charCodeAt(object, position);
 			if (!isQuoted) 
 			{
 				if (CHAR_TAB == character ||
@@ -137,7 +146,7 @@ class Renderer
 				(0x0E000 <= character && character <= 0x00FFFD) ||
 				(0x10000 <= character && character <= 0x10FFFF)))
 			{
-				result += object.substring(checkpoint, position);
+				result += yaml.util.Utf8.substring(object, checkpoint, position);
 				
 				if (ESCAPE_SEQUENCES.exists(character))
 					result += ESCAPE_SEQUENCES.get(character);
@@ -151,7 +160,7 @@ class Renderer
 
 		if (checkpoint < position)
 		{
-			result += object.substring(checkpoint, position);
+			result += yaml.util.Utf8.substring(object, checkpoint, position);
 		}
 
 		if (!isQuoted && testImplicitResolving(result))
@@ -163,6 +172,10 @@ class Renderer
 		{
 			result = '"' + result + '"';
 		}
+		
+		#if sys
+		result = Utf8.decode(result);
+		#end
 	}
 
 	function writeFlowSequence(level:Int, object:Array<Dynamic>) 
@@ -272,54 +285,39 @@ class Renderer
 		for (type in typeList)
 		{
 			if ((null != type.dumper) &&
+				type.dumper.skip != true &&
 				(null == type.dumper.kind || kind == type.dumper.kind) &&
 				(null == type.dumper.instanceOf || Std.is(object, type.dumper.instanceOf) &&
 				(null == type.dumper.predicate  || type.dumper.predicate(object))))
 			{
 				tag = explicit ? type.tag : '?';
 	
-				if (!type.dumper.skip) 
+				if (styleMap.exists(type.tag))
+					style = styleMap.get(type.tag);
+				else
+					style = type.dumper.defaultStyle;
+		
+				var success = true;
+				try
 				{
-					if (styleMap.exists(type.tag))
-						style = styleMap.get(type.tag);
+					_result = type.represent(object, style);
+				}
+				catch (e:RepresentTypeException)
+				{
+					success = false;
+				}
+				
+				if (success) 
+				{
+					kind = kindOf(_result);
+					result = _result;
+				} 
+				else 
+				{
+					if (explicit)
+						throw new YamlException('cannot represent an object of !<' + type.tag + '> type');
 					else
-						style = type.dumper.defaultStyle;
-			
-					var success = true;
-					try
-					{
-						_result = type.represent(object, style);
-					}
-					catch (e:RepresentTypeException)
-					{
-						success = false;
-					}
-					
-//					if (Reflect.isFunction(type.dumper.representer))
-//					{
-//						_result = type.dumper.representer(object, style);
-//					} 
-//					else if (Std.is(type.dumper.representer, Hash) && type.dumper.representer.exists(style))
-//					{
-//						_result = type.dumper.representer.get(style)(object, style);
-//					} 
-//					else 
-//					{
-//						throw new YamlException('!<' + type.tag + '> tag resolver accepts not "' + style + '" style');
-//					}
-
-					if (success) 
-					{
-						kind = kindOf(_result);
-						result = _result;
-					} 
-					else 
-					{
-						if (explicit)
-							throw new YamlException('cannot represent an object of !<' + type.tag + '> type');
-						else
-							continue;
-					}
+						continue;
 				}
 				return true;
 			}
@@ -344,7 +342,7 @@ class Renderer
 		if ('object' == kind)
 		{
 			var map:StringMap<Dynamic> = cast object;
-			if (block && !Iterables.isEmpty(map)) 
+			if (block && !Lambda.empty(map)) 
 			{
 				writeBlockMapping(level, map, compact);
 			}
@@ -371,10 +369,6 @@ class Renderer
 				writeScalar(result);
 			}
 		}
-		else if ("binary" == kind)
-		{
-			trace("binary block? " + block);
-		}
 		else 
 		{
 			throw new YamlException('unacceptabe kind of an object to dump (' + kind + ')');
@@ -390,7 +384,7 @@ class Renderer
 	{
 		var kind = Type.typeof(object);
 
-		return switch (kind)
+		return switch (Type.typeof(object))
 		{
 			case TNull: "null";
 			case TInt: "integer";
@@ -398,7 +392,6 @@ class Renderer
 			case TBool: "boolean";
 			case TObject:
 				if (Std.is(object, Array)) "array";
-//				else if (Std.is(object, Hash)) "map";
 				else "object";
 			case TFunction: "function";
 			case TClass(c):
