@@ -1,12 +1,31 @@
 package yaml;
 
 import haxe.PosInfos;
-import mcore.exception.Exception;
 
-class YamlException extends Exception
+class YamlException
 {
+	public var name(get_name, null):String;
+	function get_name():String { return name; }
+
+	public var message(get_message, null):String;
+	function get_message():String { return message; }
+
+	public var cause(default, null):Dynamic;
+	public var info(default, null):PosInfos;
+	
     public function new(?message:String="", ?cause:Dynamic = null, ?info:PosInfos)
 	{
-		super(message, cause, info);
+		this.name = Type.getClassName(Type.getClass(this));
+		this.message = message;
+		this.cause = cause;
+		this.info = info;
+	}
+
+	public function toString():String
+	{
+		var str:String = name + ": " + message;
+		if (info != null)
+			str += " at " + info.className + "#" + info.methodName + " (" + info.lineNumber + ")";
+		return str;
 	}
 }

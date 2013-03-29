@@ -1,6 +1,5 @@
 import massive.munit.TestSuite;
 
-import yaml.schema.DefaultSchemaTest;
 import yaml.type.YBinaryTest;
 import yaml.type.YBoolTest;
 import yaml.type.YFloatTest;
@@ -25,7 +24,6 @@ class TestSuite extends massive.munit.TestSuite
 	{
 		super();
 
-		add(yaml.schema.DefaultSchemaTest);
 		add(yaml.type.YBinaryTest);
 		add(yaml.type.YBoolTest);
 		add(yaml.type.YFloatTest);
