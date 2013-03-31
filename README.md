@@ -5,7 +5,13 @@ A cross platform [YAML](http://www.yaml.org/) 1.2 parser and renderer for Haxe. 
 
 ### Installation
 
-- *Still in development, not ready for public use just yet.*
+From haxelib:
+
+	haxelib install yaml
+	
+Or the latest directly from GitHub
+
+	haxelib git yaml https://github.com/mikestead/hx-yaml.git src
 	
 ## API
 
