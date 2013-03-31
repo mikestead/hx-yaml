@@ -37,7 +37,7 @@ pairs:
 
 # http://yaml.org/type/set.html -----------------------------------------------#
 
-set:
+sets:
   # Explicitly typed set.
   baseball players: !!set
     ? Mark McGwire
@@ -144,23 +144,6 @@ merge:
     x: 1
     label: big/left/small
 
-# http://yaml.org/type/null.html ----------------------------------------------#
-
-null:
-  # This mapping has four keys,
-  # one has a value.
-  empty:
-  canonical: ~
-  english: null
-  ~: null key
-  # This sequence has five
-  # entries, two have values.
-  sparse:
-    - ~
-    - 2nd entry
-    -
-    - 4th entry
-    - Null
 
 # http://yaml.org/type/str.html -----------------------------------------------#
 

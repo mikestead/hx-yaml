@@ -262,7 +262,7 @@ class Parser
 	{
 		if (null == _result)
 		{
-			_result = new ObjectMap<{}, Dynamic>();
+			_result = new AnyObjectMap();
 		}
 
 		if ('tag:yaml.org,2002:merge' == keyTag)
@@ -282,9 +282,17 @@ class Parser
 		{
 			#if haxe3
 			if (keyNode == null)
-				throwError("Null Map key not allowed due to lack of support in Haxe's ObjectMap at null: " + valueNode);
+			{
+				trace('Warning: null key converted to "null" String. haxe.ds.ObjectMap does not permit null keys at: "null": ' + valueNode);
+				keyNode = "null";
+			}
 			#end
+			
+//			trace("keyNode " + keyNode +"::"+ valueNode);
+			
 			_result.set(keyNode, valueNode);
+			
+//			trace(_result);
 		}
 		return _result;
 	}

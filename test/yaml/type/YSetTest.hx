@@ -1,7 +1,7 @@
 package yaml.type;
 
 import yaml.YamlType;
-import yaml.util.StringMap;
+import yaml.util.ObjectMap;
 import massive.munit.Assert;
 
 class YSetTest
@@ -10,7 +10,7 @@ class YSetTest
     public function shouldOnlyAllowNullValuesInMaps()
 	{
 		var type = new YSet();
-		var map = new StringMap();
+		var map = new AnyObjectMap();
 		map.set("key", "value");
 		
 		try {
@@ -26,7 +26,7 @@ class YSetTest
 	public function shouldAllowMapsWithNullValue()
 	{
 		var type = new YSet();
-		var map = new StringMap();
+		var map = new AnyObjectMap();
 		map.set("key", null);
 		
 		Assert.areEqual(map, type.resolve(map));

@@ -1,9 +1,9 @@
 package yaml.type;
 
-import yaml.util.StringMap;
+import yaml.util.ObjectMap;
 import yaml.YamlType;
 
-class YMap extends yaml.StringYamlType<StringMap<Dynamic>>
+class YMap extends yaml.StringYamlType<AnyObjectMap>
 {
     public function new()
 	{

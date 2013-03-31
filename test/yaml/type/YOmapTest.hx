@@ -1,7 +1,7 @@
 package yaml.type;
 
 import yaml.YamlType;
-import yaml.util.StringMap;
+import yaml.util.ObjectMap;
 import massive.munit.Assert;
 
 class YOmapTest
@@ -17,31 +17,31 @@ class YOmapTest
 	@Test
     public function shouldAllowValidOmap()
 	{
-		var value = [map("key01", "value01"), map("key02", "value02")];
+		var value:Array<AnyObjectMap> = [map("key01", "value01"), map("key02", "value02")];
 		shouldPass(value);
 
-		var value = [map("key01", null), map("key02", null)];
+		var value:Array<AnyObjectMap> = [map("key01", null), map("key02", null)];
 		shouldPass(value);
 	}
 	
 	@Test
 	public function shouldFailInvalidOmap()
 	{
-		var value = [map("key01", "value01"), map("key01", "value02")];
+		var value:Array<AnyObjectMap> = [map("key01", "value01"), map("key01", "value02")];
 		shouldFail(value);
 
 		var m = map("key01", "value01");
 		m.set("key02", "value02");
-		var value = [m, map("key03", "value03")];
+		var value:Array<AnyObjectMap> = [m, map("key03", "value03")];
 		shouldFail(value);
 	}
 
-	function shouldPass(value:Array<StringMap<Dynamic>>)
+	function shouldPass(value:Array<AnyObjectMap>)
 	{
 		Assert.areEqual(value, type.resolve(value));
 	}
 
-	function shouldFail(value:Array<StringMap<Dynamic>>)
+	function shouldFail(value:Array<AnyObjectMap>)
 	{
 		try {
 			type.resolve(value);
@@ -50,9 +50,9 @@ class YOmapTest
 		catch(e:ResolveTypeException) {}
 	}
 
-	function map(key:String, value:String)
+	function map(key:Dynamic, value:Dynamic):AnyObjectMap
 	{
-		var map = new StringMap();
+		var map = new AnyObjectMap();
 		map.set(key, value);
 		return map;
 	}

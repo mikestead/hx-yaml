@@ -1,6 +1,5 @@
 package yaml;
 
-import yaml.util.MapWrapper;
 import yaml.util.StringMap;
 import yaml.util.IntMap;
 import haxe.Utf8;
@@ -217,14 +216,19 @@ class Renderer
 		result = _result;
 	}
 
+	#if haxe3
 	function writeFlowMapping<K,V>(level:Int, object:Map<K,V>)
+	#else
+	function writeFlowMapping(level:Int, object:Dynamic)
+	#end
 	{
 		var _result = '';
 		var _tag = tag;
 		var index = 0;
 		var objectKey;
+		var keys:Iterator<Dynamic> = object.keys();
 		
-		for (objectKey in object.keys())
+		for (objectKey in keys)
 		{
 			if (0 != index++)
 				_result += ', ';
@@ -245,21 +249,23 @@ class Renderer
 		result = '{' + _result + '}';
 	}
 
+	#if haxe3
 	function writeBlockMapping<K,V>(level:Int, object:Map<K,V>, compact:Bool)
+	#else
+	function writeBlockMapping(level:Int, object:Dynamic, compact:Bool)
+	#end
 	{
 		var _result = '';
 		var _tag = tag;
 		var index = 0;
+		var keys:Iterator<Dynamic> = object.keys();
 		
-		for (objectKey in object.keys())
+		for (objectKey in keys)
 		{
 			if (!compact || 0 != index++)
 				_result += generateNextLine(level);
 
-			trace("A " + object.get(objectKey));
 			var objectValue = object.get(objectKey);
-			trace("B");
-
 			writeNode(level + 1, objectKey, true, true);
 			var explicitPair = (null != tag && '?' != tag && result.length <= 1024);
 

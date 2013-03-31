@@ -3,26 +3,12 @@
 -lib munit
 -lib hamcrest
 -cp src
--resource resource/small_sample.yaml@ss
-#-resource resource/sample.yaml@ss
+-resource resource/small_sample.yaml@small
+-resource resource/sample.yaml@large
 
 -cp test
 -swf-version 9
 -swf bin/as3_test.swf
-
---next
-
-## Flash 8
--main TestMain
--lib munit
--lib hamcrest
--cp src
-#-resource resource/small_sample.yaml@ss
--resource resource/sample.yaml@ss
-
--cp test
--swf-version 8
--swf bin/as2_test.swf
 
 --next
 
@@ -31,8 +17,8 @@
 -lib munit
 -lib hamcrest
 -cp src
--resource resource/small_sample.yaml@ss
-#-resource resource/sample.yaml@ss
+-resource resource/small_sample.yaml@small
+-resource resource/sample.yaml@large
 
 -cp test
 -js bin/js_test.js
@@ -44,8 +30,8 @@
 -lib munit
 -lib hamcrest
 -cp src
--resource resource/small_sample.yaml@ss
-#-resource resource/sample.yaml@ss
+-resource resource/small_sample.yaml@small
+-resource resource/sample.yaml@large
 
 -cp test
 -neko bin/neko_test.n
@@ -57,8 +43,8 @@
 -lib munit
 -lib hamcrest
 -cp src
-#-resource resource/small_sample.yaml@ss
--resource resource/sample.yaml@ss
+-resource resource/small_sample.yaml@small
+-resource resource/sample.yaml@large
 
 -cp test
 #-D HXCPP_M64

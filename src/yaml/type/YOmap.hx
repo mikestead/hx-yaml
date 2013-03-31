@@ -1,9 +1,9 @@
 package yaml.type;
 
-import yaml.util.StringMap;
+import yaml.util.ObjectMap;
 import Type;
 
-class YOmap extends yaml.YamlType<Array<StringMap<Dynamic>>, Array<StringMap<Dynamic>>>
+class YOmap extends yaml.YamlType<Array<AnyObjectMap>, Array<AnyObjectMap>>
 {
     public function new()
 	{
@@ -12,16 +12,16 @@ class YOmap extends yaml.YamlType<Array<StringMap<Dynamic>>, Array<StringMap<Dyn
 
 	// For omap this method is only doing a validation that no duplicates are present and that
 	// each pair has only one key. It's not really 'resolving' the value...
-	override public function resolve(object:Array<StringMap<Dynamic>>, ?explicit:Bool = false):Array<StringMap<Dynamic>>
+	override public function resolve(object:Array<AnyObjectMap>, ?explicit:Bool = false):Array<AnyObjectMap>
 	{
-		var objectKeys = new StringMap();
+		var objectKeys = new ObjectMap<Dynamic, Dynamic>();
 		
 		for (pair in object)
 		{
 			var pairHasKey = false;
-			var pairKey:String = null;
+			var pairKey:Dynamic = null;
 			
-			if (!Std.is(pair, StringMap))
+			if (!Std.is(pair, AnyObjectMap))
 			{
 				cantResolveType();
 			}
