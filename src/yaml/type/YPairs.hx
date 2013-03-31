@@ -1,5 +1,6 @@
 package yaml.type;
 
+import yaml.util.StringMap;
 import yaml.YamlType;
 import Type;
 

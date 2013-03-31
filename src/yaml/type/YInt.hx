@@ -1,6 +1,7 @@
 package yaml.type;
 
 import yaml.YamlException;
+import yaml.util.StringMap;
 import mcore.util.Ints;
 import yaml.YamlType;
 

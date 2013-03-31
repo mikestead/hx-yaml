@@ -1,5 +1,6 @@
 package yaml;
 
+import yaml.util.StringMap;
 import haxe.PosInfos;
 
 typedef POptions = 

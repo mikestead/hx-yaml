@@ -1,0 +1,16 @@
+-cp bk
+-swf bin/test.swf
+-swf-version 10.1
+-main Main
+
+--next
+
+-cp bk
+-js bin/test.js
+-main Main
+
+--next
+
+-cp bk
+-neko bin/test.n
+-main Main

@@ -1,4 +1,4 @@
-package ;
+package yaml.util;
 
 #if haxe3
 typedef StringMap<T> = haxe.ds.StringMap<T>;

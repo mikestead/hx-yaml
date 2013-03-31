@@ -1,6 +1,7 @@
 package yaml.type;
 
 import yaml.YamlType;
+import yaml.util.StringMap;
 import massive.munit.Assert;
 
 class YOmapTest

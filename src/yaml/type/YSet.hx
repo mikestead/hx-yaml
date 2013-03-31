@@ -1,5 +1,6 @@
 package yaml.type;
 
+import yaml.util.StringMap;
 import yaml.YamlType;
 
 class YSet extends YamlType<StringMap<Dynamic>, StringMap<Dynamic>>

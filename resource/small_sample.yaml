@@ -1,14 +1,1 @@
-test: 
-  bin: bin/test
-  src: 
-    - src/test
-  hxml: test.hxml
-server: 
-  port: 2000
-  host: http://localhost
-js: 
-  static: 
-    - resource/static/mobile.css
-  libs: 
-    - resource/js/lib/*.js
-    - resource/js/lib/*.js.old
+~: "value"

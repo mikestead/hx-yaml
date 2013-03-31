@@ -3,8 +3,8 @@
 -lib munit
 -lib hamcrest
 -cp src
-#-resource resource/small_sample.yaml@ss
--resource resource/sample.yaml@ss
+-resource resource/small_sample.yaml@ss
+#-resource resource/sample.yaml@ss
 
 -cp test
 -swf-version 9
@@ -31,8 +31,8 @@
 -lib munit
 -lib hamcrest
 -cp src
-#-resource resource/small_sample.yaml@ss
--resource resource/sample.yaml@ss
+-resource resource/small_sample.yaml@ss
+#-resource resource/sample.yaml@ss
 
 -cp test
 -js bin/js_test.js
@@ -44,8 +44,8 @@
 -lib munit
 -lib hamcrest
 -cp src
-#-resource resource/small_sample.yaml@ss
--resource resource/sample.yaml@ss
+-resource resource/small_sample.yaml@ss
+#-resource resource/sample.yaml@ss
 
 -cp test
 -neko bin/neko_test.n

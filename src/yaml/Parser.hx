@@ -1,5 +1,8 @@
 package yaml;
 
+import yaml.util.ObjectMap;
+import yaml.util.StringMap;
+import yaml.util.IntMap;
 import haxe.Utf8;
 import haxe.PosInfos;
 import yaml.schema.DefaultSchema;
@@ -16,13 +19,13 @@ class ParserOptions
 	public var strict:Bool;
 	public var legacy:Bool;
 
-	public function new(?schema:Schema = null)
+	public function new(?schema:Schema = null, ?strict:Bool = false)
 	{
 		this.schema = (schema == null) ? new DefaultSchema() : schema;
+		this.strict = strict;
 		
 		resolve = true;
 		validate = true;
-		strict = false;
 		legacy = false;
 	}
 }
@@ -192,7 +195,6 @@ class Parser
 		while (CHAR_SPACE == character)
 		{
 			lineIndent += 1;
-//			character = input.charCodeAt(++position);
 			character = Utf8.charCodeAt(input, ++position);
 		}
 
@@ -204,10 +206,7 @@ class Parser
 	
 	function generateError(message:String, ?info:PosInfos) 
 	{
-		return new YamlException(message, info); // TODO: pass Mark to exception for better debugging
-//      return new YAMLException(
-//		message,
-//		new Mark(filename, input, position, line, (position - lineStart)));
+		return new YamlException(message, info);
 	}
 
 	function throwError(message:String, ?info:PosInfos) 
@@ -222,7 +221,7 @@ class Parser
 		if (strict) {
 			throw error;
 		} else {
-			trace("warn", error.toString());
+			trace("Warning : " + error.toString());
 		}
 	}
 
@@ -232,7 +231,6 @@ class Parser
 
 		if (start < end) 
 		{
-//			_result = input.substring(start, end);
 			_result = yaml.util.Utf8.substring(input, start, end);
 
 			if (checkJson && validate) 
@@ -249,10 +247,9 @@ class Parser
 		}
 	}
 
-	function mergeMappings(destination:StringMap<Dynamic>, source:StringMap<Dynamic>)
+	function mergeMappings(destination:AnyObjectMap, source:AnyObjectMap)
 	{
-//      if (!common.isObject(source)) {
-		if (!Std.is(source, StringMap)) {
+		if (!Std.is(source, AnyObjectMap)) {
 			throwError('cannot merge mappings; the provided source object is unacceptable');
 		}
 	
@@ -261,18 +258,18 @@ class Parser
 				destination.set(key, source.get(key));
 	}
 
-	function storeMappingPair(_result:StringMap<Dynamic>, keyTag:String, keyNode:Dynamic, valueNode:Dynamic) 
+	function storeMappingPair(_result:AnyObjectMap, keyTag:String, keyNode:Dynamic, valueNode:Dynamic):AnyObjectMap
 	{
-		var kNode = Std.string(keyNode);
-
 		if (null == _result)
-			_result = new StringMap();
+		{
+			_result = new ObjectMap<{}, Dynamic>();
+		}
 
 		if ('tag:yaml.org,2002:merge' == keyTag)
 		{
 			if (Std.is(valueNode, Array)) 
 			{
-				var list:Array<StringMap<Dynamic>> = cast valueNode;
+				var list:Array<AnyObjectMap> = cast valueNode;
 				for (member in list)
 					mergeMappings(_result, member);
 			}
@@ -283,9 +280,12 @@ class Parser
 		}
 		else
 		{
-			_result.set(kNode, valueNode);
+			#if haxe3
+			if (keyNode == null)
+				throwError("Null Map key not allowed due to lack of support in Haxe's ObjectMap at null: " + valueNode);
+			#end
+			_result.set(keyNode, valueNode);
 		}
-
 		return _result;
 	}
 
@@ -297,7 +297,6 @@ class Parser
 		} 
 		else if (CHAR_CARRIAGE_RETURN == character)
 		{
-//			if (CHAR_LINE_FEED == input.charCodeAt(position + 1))
 			if (CHAR_LINE_FEED == Utf8.charCodeAt(input, (position + 1)))
 			{
 				position += 2;
@@ -329,13 +328,11 @@ class Parser
 		{
 			while (CHAR_SPACE == character || CHAR_TAB == character) 
 			{
-//				character = input.charCodeAt(++position);
 				character = Utf8.charCodeAt(input, ++position);
 			}
 
 			if (allowComments && CHAR_SHARP == character) 
 			{
-//				do { character = input.charCodeAt(++position); }
 				do { character = Utf8.charCodeAt(input, ++position); }
 				while (position < length && CHAR_LINE_FEED != character && CHAR_CARRIAGE_RETURN != character);
 			}
@@ -349,7 +346,6 @@ class Parser
 				while (CHAR_SPACE == character)
 				{
 					lineIndent += 1;
-//					character = input.charCodeAt(++position);
 					character = Utf8.charCodeAt(input, ++position);
 				}
 
@@ -371,13 +367,11 @@ class Parser
 	{
 		if (position == lineStart && 
 						(CHAR_MINUS == character || CHAR_DOT == character) &&
-//						input.charCodeAt(position + 1) == character && 
 						Utf8.charCodeAt(input, (position + 1)) == character &&
 						Utf8.charCodeAt(input, (position + 2)) == character) 
 		{
 
 			var pos = position + 3;
-//			var char = input.charCodeAt(pos);
 			var char = Utf8.charCodeAt(input, pos);
 
 			if (pos >= length || CHAR_SPACE == char || CHAR_TAB == char || 
@@ -861,7 +855,7 @@ class Parser
 				hasContent = allowBlockCollections && readBlockSequence(blockIndent);
 			}
 		}
-
+		
 		if (null != tag && '!' != tag)
 		{
 			var _result:Dynamic = null;
@@ -877,6 +871,7 @@ class Parser
 						// non-specific tag is only assigned to plain scalars. So, it isn't
 						// needed to check for 'kind' conformity.
 						var resolvedType = false;
+						
 						try
 						{
 							_result = type.resolve(result, false);
@@ -891,13 +886,6 @@ class Parser
 						catch (e:ResolveTypeException) {}
 						
 						if (resolvedType) break;
-						
-//						if (null != _result)
-//						{
-//							tag = type.tag;
-//							result = _result;
-//							break;
-//						}
 					}
 				}
 			}
@@ -928,15 +916,6 @@ class Parser
 					{
 						throwError('cannot resolve a node with !<' + tag + '> explicit tag');
 					}
-
-//					if (null != _result)
-//					{
-//						result = _result;
-//					}
-//					else
-//					{
-//						throwError('cannot resolve a node with !<' + tag + '> explicit tag');
-//					}
 				}
 			}
 			else
@@ -944,7 +923,7 @@ class Parser
 				throwWarning('unknown tag !<' + tag + '>');
 			}
 		}
-
+		
 		return (null != tag || null != anchor || hasContent);
 	}
 
@@ -971,7 +950,8 @@ class Parser
 			case CHAR_LEFT_CURLY_BRACKET:
 				terminator = CHAR_RIGHT_CURLY_BRACKET;
 				isMapping = true;
-				_result = new StringMap<Dynamic>();
+
+				_result = new ObjectMap<{}, Dynamic>();
 
 			default:
 				return false;
@@ -980,7 +960,6 @@ class Parser
 		if (null != anchor)
 			anchorMap.set(anchor, _result);
 
-//		character = input.charCodeAt(++position);
 		character = Utf8.charCodeAt(input, ++position);
 
 		while (position < length)
@@ -989,7 +968,6 @@ class Parser
 
 			if (character == terminator)
 			{
-//				character = input.charCodeAt(++position);
 				character = Utf8.charCodeAt(input, ++position);
 				tag = _tag;
 				kind = isMapping ? KIND_OBJECT : KIND_ARRAY;
@@ -1006,7 +984,6 @@ class Parser
 
 			if (CHAR_QUESTION == character)
 			{
-//				var following = input.charCodeAt(position + 1);
 				var following = Utf8.charCodeAt(input, position + 1);
 
 				if (CHAR_SPACE == following ||
@@ -1029,7 +1006,6 @@ class Parser
 			if ((isExplicitPair || line == _line) && CHAR_COLON == character)
 			{
 				isPair = true;
-//				character = input.charCodeAt(++position);
 				character = Utf8.charCodeAt(input, ++position);
 				skipSeparationSpace(true, nodeIndent);
 				composeNode(nodeIndent, CONTEXT_FLOW_IN, false, true);
@@ -1054,7 +1030,6 @@ class Parser
 			if (CHAR_COMMA == character)
 			{
 				readNext = true;
-//				character = input.charCodeAt(++position);
 				character = Utf8.charCodeAt(input, ++position);
 			} 
 			else
@@ -1312,8 +1287,9 @@ class Parser
 		var allowCompact = false;
 		var _line:Int;
 		var _tag = tag;
-		var _result = new StringMap<Dynamic>();
-		var keyTag = null;
+		var _result = new ObjectMap<{}, Dynamic>();
+		
+		var keyTag:Dynamic = null;
 		var keyNode:Dynamic = null;
 		var valueNode:Dynamic = null;
 		var atExplicitKey = false;

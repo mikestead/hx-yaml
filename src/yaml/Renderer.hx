@@ -1,5 +1,8 @@
 package yaml;
 
+import yaml.util.MapWrapper;
+import yaml.util.StringMap;
+import yaml.util.IntMap;
 import haxe.Utf8;
 import haxe.io.Bytes;
 import yaml.YamlType;
@@ -214,7 +217,7 @@ class Renderer
 		result = _result;
 	}
 
-	function writeFlowMapping(level:Int, object:StringMap<Dynamic>) 
+	function writeFlowMapping<K,V>(level:Int, object:Map<K,V>)
 	{
 		var _result = '';
 		var _tag = tag;
@@ -242,7 +245,7 @@ class Renderer
 		result = '{' + _result + '}';
 	}
 
-	function writeBlockMapping(level:Int, object:StringMap<Dynamic>, compact:Bool)
+	function writeBlockMapping<K,V>(level:Int, object:Map<K,V>, compact:Bool)
 	{
 		var _result = '';
 		var _tag = tag;
@@ -253,7 +256,9 @@ class Renderer
 			if (!compact || 0 != index++)
 				_result += generateNextLine(level);
 
+			trace("A " + object.get(objectKey));
 			var objectValue = object.get(objectKey);
+			trace("B");
 
 			writeNode(level + 1, objectKey, true, true);
 			var explicitPair = (null != tag && '?' != tag && result.length <= 1024);
@@ -341,14 +346,13 @@ class Renderer
 
 		if ('object' == kind)
 		{
-			var map:StringMap<Dynamic> = cast object;
-			if (block && !Lambda.empty(map)) 
+			if (block && !Lambda.empty(object)) 
 			{
-				writeBlockMapping(level, map, compact);
+				writeBlockMapping(level, object, compact);
 			}
 			else
 			{
-				writeFlowMapping(level, map);
+				writeFlowMapping(level, object);
 			}
 		}
 		else if ('array' == kind)

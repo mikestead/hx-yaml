@@ -1,5 +1,6 @@
 package yaml;
 
+import yaml.util.StringMap;
 import yaml.YamlType;
 
 class Schema

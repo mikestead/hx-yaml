@@ -3,6 +3,9 @@ package yaml;
 import yaml.Renderer;
 import yaml.Parser;
 
+/**
+Facade for common YAML processing operations.
+*/
 class Yaml
 {
 	/**
@@ -35,7 +38,7 @@ class Yaml
 	#end
 
 	/**
-	Render a yaml object graph as a yaml document.
+	Render a yaml object graph as a yaml text document.
 	
 	@param data         The root object to render.
 	@param ?options     Rendering options (optional).
@@ -50,13 +53,13 @@ class Yaml
 
 	#if sys
 	/**
-	Render an object graph as a yaml document and write it to disk.
+	Render an object graph as a yaml text document and write it to disk.
 	
-	@param data         The root object to render.
 	@param filePath     The path to write the yaml document.
+	@param data         The root object to render.
 	@param ?options     Rendering options (optional).
 	*/
-	public static function write(data:Dynamic, filePath:String, ?options:RenderOptions):Void
+	public static function write(filePath:String, data:Dynamic, ?options:RenderOptions):Void
 	{
 		sys.io.File.saveContent(filePath, render(data, options));
 	}

@@ -1,5 +1,6 @@
 package yaml.type;
 
+import yaml.util.StringMap;
 import Type;
 
 class YOmap extends yaml.YamlType<Array<StringMap<Dynamic>>, Array<StringMap<Dynamic>>>

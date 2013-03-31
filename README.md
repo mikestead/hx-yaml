@@ -29,7 +29,7 @@ See the
 	yaml.Yaml.render(data:Dynamic, ?options:RenderOptions):String
 	
 	// (sys only) Render a yaml object graph as a yaml document and write it to disk
-	yaml.Yaml.write(data:Dynamic, filePath:String, ?options:RenderOptions):Void
+	yaml.Yaml.write(filePath:String, data:Dynamic, ?options:RenderOptions):Void
 	
 	yaml.Renderer.RendererOptions:
 		- indent:Int        - The space indentation to use. Default `2`.
