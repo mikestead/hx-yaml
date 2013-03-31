@@ -65,8 +65,6 @@ keys on all targets and we need a map which can contain a mixture of key types.
 ## Limitations
 
 - Under Neko UTC date translation is not yet possible so dates will be represented in local time instead.
-- A map can only have a null key (e.g. `~: value`) pre Haxe 3. Haxe 3's ObjectMap does not allow null keys but their
- use is still preferred for performance reasons.
 - Requires Neko 2.0+ when used under the Neko runtime due to its support for Unicode based regular expressions.
 - CPP does not yet support Unicode based regular expressions so is not yet a supported target.
 
