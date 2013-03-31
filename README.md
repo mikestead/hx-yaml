@@ -1,6 +1,6 @@
 # Overview
 
-A cross platform [YAML](http://www.yaml.org/) parser and renderer for Haxe. Ported from the fast and feature rich
+A cross platform [YAML](http://www.yaml.org/) 1.2 parser and renderer for Haxe. Ported from the fast and feature rich
 [js-yaml](https://github.com/nodeca/js-yaml). Currently supports JS, AS3 and Neko 2.0+.
 
 ### Installation
