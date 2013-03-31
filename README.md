@@ -15,7 +15,6 @@ Or the latest directly from GitHub
 	
 ## API
 
-See the 
 #### Parsing
 
 	// Parse a single yaml document into object form
