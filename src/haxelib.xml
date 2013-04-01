@@ -1,7 +1,7 @@
 <project name="yaml" url="https://github.com/mikestead/hx-yaml" license="MIT">
 	<user name="mikestead"/>
 	<description><![CDATA[A cross platform YAML 1.2 parser and renderer for Haxe.]]></description>
-	<version name="1.0.0"><![CDATA[Port js-yaml to Haxe.]]></version>
+	<version name="1.1.0"><![CDATA[Add support for parsing yaml mappings into Dynamic objects.]]></version>
 	<tag v="cross"/>
 	<tag v="utility"/>
 </project>
