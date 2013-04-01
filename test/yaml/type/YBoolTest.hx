@@ -18,11 +18,11 @@ class YBoolTest
 	{
 		var pos = ["true", "True", "TRUE", "y", "Y", "yes", "Yes", "YES", "on", "On", "ON"];
 		for (value in pos)
-			Assert.isTrue(type.resolve(value, true));
+			Assert.isTrue(type.resolve(value, true, true));
 		
 		var neg = ["n", "N", "no", "No", "NO", "false", "False", "FALSE", "off", "Off", "OFF"];
 		for (value in neg)
-			Assert.isFalse(type.resolve(value, true));
+			Assert.isFalse(type.resolve(value, true, true));
 	}
 
 	@Test
@@ -30,11 +30,11 @@ class YBoolTest
 	{
 		var pos = ["true", "True", "TRUE"];
 		for (value in pos)
-			Assert.isTrue(type.resolve(value, false));
+			Assert.isTrue(type.resolve(value, true, false));
 
 		var neg = ["false", "False", "FALSE"];
 		for (value in neg)
-			Assert.isFalse(type.resolve(value, false));
+			Assert.isFalse(type.resolve(value, true, false));
 	}
 	
 	@Test
