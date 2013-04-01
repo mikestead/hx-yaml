@@ -13,6 +13,74 @@ Or the latest directly from GitHub
 
 	haxelib git yaml https://github.com/mikestead/hx-yaml.git src
 	
+## Example
+
+`invoice.yaml`
+
+	invoice: 34843
+    date   : 2001-01-23
+    bill_to: &id001
+        given  : Chris
+        family : Dumars
+        address:
+            lines: |
+                458 Walkman Dr.
+                Suite #292
+            city    : Royal Oak
+            state   : MI
+            postal  : 48046
+    ship_to: *id001
+    tax  : 251.42
+    457: true
+    total: 4443.52
+    comments: >
+        Late afternoon is best.
+        Backup contact is Nancy
+        Billsmer @ 338-4338.
+
+`Example.hx`
+
+	import yaml.Yaml;
+	import yaml.util.ObjectMap;
+	
+	// PARSING
+	
+	// Load and parse our invoice document. Use dynamic objects for key => value containers.
+	// This option will stringify all keys but is useful for mapping to typedefs.
+	var data = Yaml.read("invoice.yaml", Parser.options().useObjects());
+	trace(data.invoice); // 3483
+	trace(data.ship_to.given); // Chris
+	trace(Reflect.field(data, "457")); // true
+	
+	// Load and parse the same document using yaml.util.ObjectMap for key => value containers.
+	// Using this default option allows for complex key types and a slightly nicer api to iterate keys/values.
+	var data:AnyObjectMap = Yaml.read("invoice.yaml", Parser.options().useMaps()); // Same as Yaml.read("invoice.yaml");
+	trace(data.get("tax")); // 251.42
+	trace(data.get(457)); // true
+
+	// RENDERING
+	
+	var data = {name:Chris, costs:[{rice:2.34}, {milk:1.22}]};
+	
+	// Render an object tree as a yaml document.
+	var document = Yaml.render(data);
+	trace(document);
+	
+	// output
+	name: Chris
+	costs: 
+		- rice: 2.34
+		- milk: 1.22
+	
+	// This time write that same document to disk and adjust the flow level giving a more compact result.
+	Yaml.write("expenses.yaml", data, Renderer.options().setFlowLevel(1));
+	
+`expenses.yaml`
+
+	name: Chris
+	costs: [{rice: 2.34}, {milk: 1.22}]
+
+
 ## API
 
 #### Parsing
@@ -27,6 +95,7 @@ Or the latest directly from GitHub
 		- strict:Bool     - Parser will throw errors instead of tracing warnings. Default `false`.
         - validate:Bool   - Perform validation checks while parsing. Default is `true`.
         - schema:Schema   - The schema to use. Default is `yaml.schema.DefaultSchema`.
+        - maps:Boolean    - True when using ObjectMaps, false when using Dynamic objects.
 
 #### Rendering
 
