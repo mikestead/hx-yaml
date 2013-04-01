@@ -133,7 +133,7 @@ The list of standard YAML tags and corresponding Haxe types. See also
 ```
 
 When parsing maps, [yaml.util.ObjectMap](https://github.com/mikestead/hx-yaml/blob/master/src/yaml/util/ObjectMap.hx) 
-is used. Under Haxe 3.0 `haxe.ds.ObjectMap` would be used but it doesn't support primitive
+is used. Under Haxe 3.0 `haxe.ds.ObjectMap` *would* be used but it doesn't support primitive
 keys on all targets and we need a map which can contain a mixture of key types.
 
 ## Limitations
