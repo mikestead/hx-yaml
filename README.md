@@ -112,6 +112,26 @@ Or the latest directly from GitHub
 		- styles:StringMap  - "tag" => "style" map. Each tag may have its own set of styles.
 		- schema:Schema     - The schema to use. Default is `yaml.schema.DefaultSchema`.
 
+##### Rendering Styles
+
+``` none
+!!null
+  "canonical"   => "~"
+
+!!int
+  "binary"      => "0b1", "0b101010", "0b1110001111010"
+  "octal"       => "01", "052", "016172"
+  "decimal"     => "1", "42", "7290"
+  "hexadecimal" => "0x1", "0x2A", "0x1C7A"
+
+!!null, !!bool, !!float
+  "lowercase"   => "null", "true", "false", ".nan", '.inf'
+  "uppercase"   => "NULL", "TRUE", "FALSE", ".NAN", '.INF'
+  "camelcase"   => "Null", "True", "False", ".NaN", '.Inf'
+```
+
+By default, !!int uses `decimal`, and !!null, !!bool, !!float use `lowercase`.
+
 ## Supported YAML types
 
 The list of standard YAML tags and corresponding Haxe types. See also
