@@ -21,14 +21,14 @@ class YamlTest
 	public function shouldParseYaml()
 	{
 		var time = haxe.Timer.stamp();
-//		var data = cast Yaml.parse(smallSample, new ParserOptions(null, false));
-		var data = cast Yaml.parse(largeSample, new ParserOptions(null, false));
+//		var data:Dynamic = Yaml.parse(smallSample, Parser.options().useObjects());
+		var data:Dynamic = Yaml.parse(largeSample, Parser.options().useObjects());
 		trace((haxe.Timer.stamp() - time));
 		
 		#if sys
-		Yaml.write("bin/test/output.yaml", data, new RenderOptions(2, 2));
+		Yaml.write("bin/test/output.yaml", data);
 		#else
-		trace(Yaml.render(data, new RenderOptions(2, 2)));
+		trace(Yaml.render(data));
 		#end
 	}
 }

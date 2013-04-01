@@ -1,5 +1,6 @@
 package yaml;
 
+import Type;
 import yaml.util.StringMap;
 import yaml.util.IntMap;
 import haxe.Utf8;
@@ -16,20 +17,55 @@ class RenderOptions
 {
 	public var schema:Schema;
 	public var indent:Int;
-	public var flowLevel:Int;
+	public var flow:Int;
 	public var styles:StringMap<String>;
 
-	public function new(?indent:Int = 2, ?flowLevel:Int = -1, ?schema:Schema, ?styles:StringMap<String>)
+	public function new(?schema:Schema, ?styles:StringMap<String>)
+	{
+		this.schema = (schema != null) ? schema : new DefaultSchema();
+		this.styles = (styles != null) ? styles : new StringMap();
+		this.indent = 2;
+		this.flow = -1;
+	}
+
+	public function setSchema(schema:Schema):RenderOptions
+	{
+		this.schema = schema;
+		return this;
+	}
+
+	public function setFlowLevel(level:Int):RenderOptions
+	{
+		this.flow = level;
+		return this;
+	}
+
+	/**
+	The indentation level. Default is 2. 
+	*/
+	public function setIndent(indent:Int):RenderOptions
 	{
 		this.indent = indent;
-		this.flowLevel = flowLevel;
-		this.schema = (schema != null) ? schema : new DefaultSchema();
-		this.styles = styles;
+		return this;
+	}
+
+	public function setStyle(name:String, value:String):RenderOptions
+	{
+		styles.set(name, value);
+		return this;
 	}
 }
 
 class Renderer
 {
+	/**
+	Utility method to create RenderOptions for configuring a Renderer instance. 
+    */
+	public static function options():RenderOptions
+	{
+		return new RenderOptions();
+	}
+
 	var schema:Schema;
 	var indent:Int;
 	var flowLevel:Int;
@@ -55,7 +91,7 @@ class Renderer
 	{
 		schema = options.schema;
 		indent    = Std.int(Math.max(1, options.indent));
-		flowLevel = options.flowLevel;
+		flowLevel = options.flow;
 		styleMap  = compileStyleMap(schema, options.styles);
 
 		implicitTypes = schema.compiledImplicit;
@@ -151,9 +187,13 @@ class Renderer
 				result += yaml.util.Utf8.substring(object, checkpoint, position);
 				
 				if (ESCAPE_SEQUENCES.exists(character))
+				{
 					result += ESCAPE_SEQUENCES.get(character);
+				}
 				else
+				{
 					result += encodeHex(character);
+				}
 				
 				checkpoint = position + 1;
 				isQuoted = true;
@@ -216,10 +256,46 @@ class Renderer
 		result = _result;
 	}
 
-	#if haxe3
-	function writeFlowMapping<K,V>(level:Int, object:Map<K,V>)
-	#else
 	function writeFlowMapping(level:Int, object:Dynamic)
+	{
+		if (Type.typeof(object) == ValueType.TObject)
+			writeObjectFlowMapping(level, object);
+		else
+			writeMapFlowMapping(level, object);
+	}
+	
+	function writeObjectFlowMapping(level:Int, object:Dynamic)
+	{
+		var _result = '';
+		var _tag = tag;
+		var index = 0;
+		var objectKey;
+
+		for (objectKey in Reflect.fields(object))
+		{
+			if (0 != index++)
+				_result += ', ';
+
+			var objectValue = Reflect.field(object, objectKey);
+
+			writeNode(level, objectKey, false, false);
+
+			if (result.length > 1024)
+				_result += '? ';
+
+			_result += result + ': ';
+			writeNode(level, objectValue, false, false);
+			_result += result;
+		}
+
+		tag = _tag;
+		result = '{' + _result + '}';		
+	}
+
+	#if haxe3
+	function writeMapFlowMapping<K,V>(level:Int, object:Map<K,V>)
+	#else
+	function writeMapFlowMapping(level:Int, object:Dynamic)
 	#end
 	{
 		var _result = '';
@@ -249,10 +325,49 @@ class Renderer
 		result = '{' + _result + '}';
 	}
 
-	#if haxe3
-	function writeBlockMapping<K,V>(level:Int, object:Map<K,V>, compact:Bool)
-	#else
 	function writeBlockMapping(level:Int, object:Dynamic, compact:Bool)
+	{
+		if (Type.typeof(object) == ValueType.TObject)
+			writeObjectBlockMapping(level, object, compact);
+		else
+			writeMapBlockMapping(level, object, compact);
+	}
+	
+	function writeObjectBlockMapping(level:Int, object:Dynamic, compact:Bool)
+	{
+		var _result = '';
+		var _tag = tag;
+		var index = 0;
+
+		for (objectKey in Reflect.fields(object))
+		{
+			if (!compact || 0 != index++)
+				_result += generateNextLine(level);
+
+			var objectValue = Reflect.field(object, objectKey);
+			writeNode(level + 1, objectKey, true, true);
+			var explicitPair = (null != tag && '?' != tag && result.length <= 1024);
+
+			if (explicitPair)
+				_result += '? ';
+
+			_result += result;
+
+			if (explicitPair)
+				_result += generateNextLine(level);
+
+			writeNode(level + 1, objectValue, true, explicitPair);
+			_result += ': ' + result;
+		}
+
+		tag = _tag;
+		result = _result;		
+	}
+
+	#if haxe3
+	function writeMapBlockMapping<K,V>(level:Int, object:Map<K,V>, compact:Bool)
+	#else
+	function writeMapBlockMapping(level:Int, object:Dynamic, compact:Bool)
 	#end
 	{
 		var _result = '';
@@ -352,7 +467,9 @@ class Renderer
 
 		if ('object' == kind)
 		{
-			if (block && !Lambda.empty(object)) 
+			var empty = (Type.typeof(object) == ValueType.TObject) ? (Reflect.fields(object).length == 0) : Lambda.empty(object);
+			
+			if (block && !empty) 
 			{
 				writeBlockMapping(level, object, compact);
 			}

@@ -51,7 +51,7 @@ class YBool extends StringYamlType<Bool>
 		super('tag:yaml.org,2002:bool', {kind:"string"}, {kind:"boolean", defaultStyle:"lowercase"});
 	}
 
-	override public function resolve(object:String, ?explicit:Bool):Bool
+	override public function resolve(object:String, ?usingMaps:Bool = true, ?explicit:Bool):Bool
 	{
 		if (explicit) 
 		{

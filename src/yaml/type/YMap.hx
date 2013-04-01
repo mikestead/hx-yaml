@@ -3,7 +3,7 @@ package yaml.type;
 import yaml.util.ObjectMap;
 import yaml.YamlType;
 
-class YMap extends yaml.StringYamlType<AnyObjectMap>
+class YMap extends yaml.StringYamlType<Dynamic>
 {
     public function new()
 	{

@@ -22,7 +22,7 @@ class YTimestamp extends YamlType<Date, String>
 		super('tag:yaml.org,2002:timestamp', {kind:"string"}, {kind:"object", instanceOf:Date});
 	}
 
-	override public function resolve(object:String, ?explicit:Bool = false):Date
+	override public function resolve(object:String, ?usingMaps:Bool = true, ?explicit:Bool = false):Date
 	{
 		if (!YAML_TIMESTAMP_REGEXP.match(object))
 			cantResolveType();

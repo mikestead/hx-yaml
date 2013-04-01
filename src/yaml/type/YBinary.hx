@@ -27,7 +27,7 @@ class YBinary extends yaml.StringYamlType<Bytes>
 		super('tag:yaml.org,2002:binary', {kind:"string"}, {kind:"binary", instanceOf:Bytes});
 	}
 
-	override public function resolve(object:String, ?explicit:Bool):Bytes
+	override public function resolve(object:String, ?usingMaps:Bool = true, ?explicit:Bool):Bytes
 	{
 		var length = Utf8.length(object);
 		var idx = 0;

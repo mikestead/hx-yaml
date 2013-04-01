@@ -43,7 +43,7 @@ class YamlType<T, D>
 			validateDumperOptions();
 	}
 
-	public function resolve(object:D, ?explicit:Bool = false):T
+	public function resolve(object:D, ?usingMaps:Bool = true, ?explicit:Bool = false):T
 	{
 		cantResolveType();
 		return null;

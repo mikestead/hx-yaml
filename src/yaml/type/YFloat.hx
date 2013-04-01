@@ -17,7 +17,7 @@ class YFloat extends yaml.StringYamlType<Null<Float>>
 		super('tag:yaml.org,2002:float', {kind:"string"}, {kind:"float", defaultStyle:"lowercase"});
 	}
 
-	override public function resolve(object:String, ?explicit:Bool):Null<Float>
+	override public function resolve(object:String, ?usingMaps:Bool = true, ?explicit:Bool):Null<Float>
 	{
 		if (!YAML_FLOAT_PATTERN.match(object)) 
 			cantResolveType();

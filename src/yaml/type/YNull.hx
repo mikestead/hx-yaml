@@ -19,7 +19,7 @@ class YNull extends yaml.StringYamlType<Dynamic>
 		super('tag:yaml.org,2002:null', {kind:"string"}, {kind:"null", defaultStyle:"lowercase"});
 	}
 
-	override public function resolve(object:String, ?explicit:Bool = false):Dynamic
+	override public function resolve(object:String, ?usingMaps:Bool = true, ?explicit:Bool = false):Dynamic
 	{
 		return YAML_NULL_MAP.exists(object) ? null : cantResolveType();
 	}

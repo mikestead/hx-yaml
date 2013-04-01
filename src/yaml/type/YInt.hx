@@ -32,7 +32,7 @@ class YInt extends yaml.StringYamlType<Null<Int>>
 		return styleAliases;
 	}
 	
-	override public function resolve(object:String, ?explicit:Bool):Null<Int>
+	override public function resolve(object:String, ?usingMaps:Bool = true, ?explicit:Bool):Null<Int>
 	{
 		if (!YAML_INTEGER_PATTERN.match(object))
 			cantResolveType();

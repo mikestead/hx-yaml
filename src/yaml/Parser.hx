@@ -1,5 +1,6 @@
 package yaml;
 
+import Type;
 import yaml.util.ObjectMap;
 import yaml.util.StringMap;
 import yaml.util.IntMap;
@@ -15,30 +16,90 @@ class ParserOptions
 {
 	public var schema:Schema;
 	public var resolve:Bool;
-	public var validate:Bool;
+	public var validation:Bool;
 	public var strict:Bool;
-	public var legacy:Bool;
+	public var maps:Bool;
 
-	public function new(?schema:Schema = null, ?strict:Bool = false)
+	/**
+	@param schema   Defines the schema to use while parsing. Defaults to yaml.schema.DefaultSchema.  
+	*/
+	public function new(?schema:Schema = null)
 	{
 		this.schema = (schema == null) ? new DefaultSchema() : schema;
-		this.strict = strict;
 		
+		strict = false;
 		resolve = true;
-		validate = true;
-		legacy = false;
+		validation = true;
+		maps = true;
+	}
+
+	/**
+	Use yaml.util.ObjectMap as the key => value container. 
+	
+	Allows for complex key values.
+    */
+	public function useMaps():ParserOptions
+	{
+		maps = true;
+		return this;
+	}
+
+	/**
+	Use Dynamic objects as the key => value container.
+	
+	All keys will become Strings.
+    */
+	public function useObjects():ParserOptions
+	{
+		maps = false;
+		return this;
+	}
+
+	/**
+	Defines the schema to use while parsing.
+	 
+	See yaml.Schema
+	*/
+	public function setSchema(schema:Schema):ParserOptions
+	{
+		this.schema = schema;
+		return this;
+	}
+
+	/**
+	Warnings will be thrown as exceptions instead of traced.
+	*/
+	public function strictMode(?value:Bool = true):ParserOptions
+	{
+		strict = value;
+		return this;
+	}
+
+	/**
+	Disables validation of yaml document while parsing.
+	*/
+	public function validate(?value:Bool = true):ParserOptions
+	{
+		validation = value;
+		return this;
 	}
 }
 
 class Parser
 {
-	public var options:ParserOptions;
-
+	/**
+	Utility method to create ParserOptions for configuring a Parser instance. 
+    */
+	public static function options():ParserOptions
+	{
+		return new ParserOptions();
+	}
+	
 	var schema:Schema;
 	var resolve:Bool;
 	var validate:Bool;
 	var strict:Bool;
-	var legacy:Bool;
+	var usingMaps:Bool;
 
 	var directiveHandlers:StringMap<String->Array<String>->Void>;
 	var implicitTypes:Array<AnyYamlType>;
@@ -109,13 +170,12 @@ class Parser
 		#end
 		
 		this.output = output;
-		this.options = options;
 		
 		schema   = options.schema;
 		resolve  = options.resolve;
-		validate = options.validate;
+		validate = options.validation;
 		strict   = options.strict;
-		legacy   = options.legacy;
+		usingMaps  = options.maps;
 
 		directiveHandlers = new StringMap();
 		implicitTypes = schema.compiledImplicit;
@@ -246,7 +306,20 @@ class Parser
 			result += _result;
 		}
 	}
-
+	
+	// when create dynamic object graph
+	function mergeObjectMappings(destination:Dynamic, source:Dynamic)
+	{
+		if (Type.typeof(source) != ValueType.TObject) {
+			throwError('cannot merge mappings; the provided source object is unacceptable');
+		}
+	
+		for (key in Reflect.fields(source))
+			if (!Reflect.hasField(destination, key))
+				Reflect.setField(destination, key, Reflect.field(source, key));
+	}
+	
+	// when creating map based graph
 	function mergeMappings(destination:AnyObjectMap, source:AnyObjectMap)
 	{
 		if (!Std.is(source, AnyObjectMap)) {
@@ -256,6 +329,32 @@ class Parser
 		for (key in source.keys())
 			if (!destination.exists(key))
 				destination.set(key, source.get(key));
+	}
+	
+
+	function storeObjectMappingPair(_result:Dynamic, keyTag:String, keyNode:Dynamic, valueNode:Dynamic):Dynamic
+	{
+		if (null == _result)
+			_result = {};
+
+		if ('tag:yaml.org,2002:merge' == keyTag)
+		{
+			if (Std.is(valueNode, Array))
+			{
+				var list:Array<Dynamic> = cast valueNode;
+				for (member in list)
+					mergeObjectMappings(_result, member);
+			}
+			else
+			{
+				mergeObjectMappings(_result, valueNode);
+			}
+		}
+		else
+		{
+			Reflect.setField(_result, keyNode, valueNode);
+		}
+		return _result;
 	}
 
 	function storeMappingPair(_result:AnyObjectMap, keyTag:String, keyNode:Dynamic, valueNode:Dynamic):AnyObjectMap
@@ -280,19 +379,7 @@ class Parser
 		}
 		else
 		{
-			#if haxe3
-			if (keyNode == null)
-			{
-				trace('Warning: null key converted to "null" String. haxe.ds.ObjectMap does not permit null keys at: "null": ' + valueNode);
-				keyNode = "null";
-			}
-			#end
-			
-//			trace("keyNode " + keyNode +"::"+ valueNode);
-			
 			_result.set(keyNode, valueNode);
-			
-//			trace(_result);
 		}
 		return _result;
 	}
@@ -882,7 +969,7 @@ class Parser
 						
 						try
 						{
-							_result = type.resolve(result, false);
+							_result = type.resolve(result, usingMaps, false);
 							#if sys
 							if (Std.is(_result, String))
 								_result = Utf8.decode(_result);
@@ -900,7 +987,6 @@ class Parser
 			else if (typeMap.exists(tag))
 			{
 				var t = typeMap.get(tag);
-				//					var typeLoader = typeMap.get(tag).loader;
 
 				if (null != result && t.loader.kind != kind)
 				{
@@ -912,7 +998,7 @@ class Parser
 					
 					try
 					{
-						_result = t.resolve(result, true);
+						_result = t.resolve(result, usingMaps, true);
 						#if sys
 						if (Std.is(_result, String))
 							_result = Utf8.decode(_result);
@@ -958,8 +1044,7 @@ class Parser
 			case CHAR_LEFT_CURLY_BRACKET:
 				terminator = CHAR_RIGHT_CURLY_BRACKET;
 				isMapping = true;
-
-				_result = new ObjectMap<{}, Dynamic>();
+				_result = usingMaps ? new ObjectMap<{}, Dynamic>() :  {};
 
 			default:
 				return false;
@@ -1022,11 +1107,17 @@ class Parser
 			
 			if (isMapping)
 			{
-				storeMappingPair(_result, keyTag, keyNode, valueNode);
-			} 
+				if (usingMaps)
+					storeMappingPair(_result, keyTag, keyNode, valueNode);
+				else
+					storeObjectMappingPair(_result, keyTag, keyNode, valueNode);
+			}
 			else if (isPair) 
 			{
-				_result.push(storeMappingPair(null, keyTag, keyNode, valueNode));
+				if (usingMaps)
+					_result.push(storeMappingPair(null, keyTag, keyNode, valueNode));
+				else
+					_result.push(storeObjectMappingPair(null, keyTag, keyNode, valueNode));
 			}
 			else 
 			{
@@ -1295,7 +1386,7 @@ class Parser
 		var allowCompact = false;
 		var _line:Int;
 		var _tag = tag;
-		var _result = new ObjectMap<{}, Dynamic>();
+		var _result:Dynamic = usingMaps ? new ObjectMap<{}, Dynamic>() : {};
 		
 		var keyTag:Dynamic = null;
 		var keyNode:Dynamic = null;
@@ -1322,7 +1413,10 @@ class Parser
 				{
 					if (atExplicitKey) 
 					{
-						storeMappingPair(_result, keyTag, keyNode, null);
+						if (usingMaps)
+							storeMappingPair(_result, keyTag, keyNode, null);
+						else
+							storeObjectMappingPair(_result, keyTag, keyNode, null);
 						keyTag = keyNode = valueNode = null;
 					}
 
@@ -1372,7 +1466,11 @@ class Parser
 
 						if (atExplicitKey) 
 						{
-							storeMappingPair(_result, keyTag, keyNode, null);
+							if (usingMaps)
+								storeMappingPair(_result, keyTag, keyNode, null);
+							else
+								storeObjectMappingPair(_result, keyTag, keyNode, null);
+							
 							keyTag = keyNode = valueNode = null;
 						}
 
@@ -1422,7 +1520,10 @@ class Parser
 
 				if (!atExplicitKey) 
 				{
-					storeMappingPair(_result, keyTag, keyNode, valueNode);
+					if (usingMaps)
+						storeMappingPair(_result, keyTag, keyNode, valueNode);
+					else
+						storeObjectMappingPair(_result, keyTag, keyNode, valueNode);
 					keyTag = keyNode = valueNode = null;
 				}
 
@@ -1444,7 +1545,10 @@ class Parser
 
 		if (atExplicitKey) 
 		{
-			storeMappingPair(_result, keyTag, keyNode, null);
+			if (usingMaps)
+				storeMappingPair(_result, keyTag, keyNode, null);
+			else
+				storeObjectMappingPair(_result, keyTag, keyNode, null);
 		}
 
 		if (detected) 
@@ -1657,7 +1761,7 @@ class Parser
 		var hasDirectives = false;
 
 		version = null;
-		checkLineBreaks = legacy;
+		checkLineBreaks = false;
 		tagMap = new StringMap();
 		anchorMap = new StringMap();
 

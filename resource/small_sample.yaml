@@ -1,7 +1,8 @@
-map:
-  # Unordered set of key: value pairs.
-  Block style: !!map
-    Clark : Evans
-    Ingy  : döt Net
-    Oren  : Ben-Kiki
-  Flow style: !!map { Clark: Evans, Ingy: döt Net, Oren: Ben-Kiki }
+sets:
+  # Explicitly typed set.
+  baseball players: !!set
+    ? Mark McGwire
+    ? Sammy Sosa
+    ? Ken Griffey
+  # Flow style
+  baseball teams: !!set { Boston Red Sox, Detroit Tigers, New York Yankees }
