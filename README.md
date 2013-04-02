@@ -48,7 +48,7 @@ import yaml.Parser;
 import yaml.Renderer;
 import yaml.util.ObjectMap;
 
-class Main
+class Example
 {
 	static function main()
 	{
