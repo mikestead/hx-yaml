@@ -65,8 +65,10 @@ class Main
 		trace(Reflect.field(data, "457")); // true
 
 		// Load and parse the same document using yaml.util.ObjectMap for key => value containers.
-		// Using this default option allows for complex key types and a slightly nicer api to iterate keys/values.
-		var data:AnyObjectMap = Yaml.read("invoice.yaml", Parser.options().useMaps()); // Same as Yaml.read("invoice.yaml");
+		// Using this default option allows for complex key types and a slightly 
+		// nicer api to iterate keys/values.
+		// Equivalent to Yaml.read("invoice.yaml", Parser.options().useMaps()); 
+		var data:AnyObjectMap = Yaml.read("invoice.yaml");
 		trace(data.get("tax")); // 251.42
 		trace(data.get(457)); // true
 		#end
@@ -87,7 +89,8 @@ class Main
 		//      - milk: 1.22
 
 		#if sys
-		// This time write that same document to disk and adjust the flow level giving a more compact result.
+		// This time write that same document to disk and adjust the flow level 
+		// producing a more compact result.
 		Yaml.write("expenses.yaml", data, Renderer.options().setFlowLevel(1));
 		#end
 	}
