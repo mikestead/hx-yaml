@@ -16,7 +16,7 @@ Or the latest directly from GitHub
 ## Example
 
 `invoice.yaml`
-``` yml
+``` yaml
 invoice: 34843
 date   : 2001-01-23
 bill_to: &id001
