@@ -21,23 +21,23 @@ Or the latest directly from GitHub
 invoice: 34843
 date   : 2001-01-23
 bill_to: &id001
-    given  : Chris
-    family : Dumars
-    address:
-        lines: |
-            458 Walkman Dr.
-            Suite #292
-        city    : Royal Oak
-        state   : MI
-        postal  : 48046
+  given  : Chris
+  family : Dumars
+  address:
+    lines: |
+      458 Walkman Dr.
+      Suite #292
+    city    : Royal Oak
+    state   : MI
+    postal  : 48046
 ship_to: *id001
 tax  : 251.42
 457: true
 total: 4443.52
 comments: >
-    Late afternoon is best.
-    Backup contact is Nancy
-    Billsmer @ 338-4338.
+  Late afternoon is best.
+  Backup contact is Nancy
+  Billsmer @ 338-4338.
 ```
 
 #### Example.hx
