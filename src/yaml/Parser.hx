@@ -352,7 +352,7 @@ class Parser
 		}
 		else
 		{
-			Reflect.setField(_result, keyNode, valueNode);
+			Reflect.setField(_result, Std.string(keyNode), valueNode);
 		}
 		return _result;
 	}
@@ -637,7 +637,10 @@ class Parser
 				captureEnd = position + 1;
 			}
 
-			character = Utf8.charCodeAt(input, ++position);
+			if (++position >= length)
+				break;
+			
+			character = Utf8.charCodeAt(input, position);
 		}
 
 		captureSegment(captureStart, captureEnd, false);
