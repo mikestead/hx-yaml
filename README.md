@@ -15,8 +15,9 @@ Or the latest directly from GitHub
 	
 ## Example
 
-`invoice.yaml`
-``` yaml
+#### invoice.yaml
+
+``` yml
 invoice: 34843
 date   : 2001-01-23
 bill_to: &id001
@@ -39,46 +40,61 @@ comments: >
     Billsmer @ 338-4338.
 ```
 
-`Example.hx`
+#### Example.hx
 
-``` haXe
+``` haxe
 import yaml.Yaml;
 import yaml.util.ObjectMap;
 
-// PARSING
+class Main 
+{
+	static function main() 
+	{
+		parsingExample();
+		renderingExample();
+	}
 
-// Load and parse our invoice document. Use dynamic objects for key => value containers.
-// This option will stringify all keys but is useful for mapping to typedefs.
-var data = Yaml.read("invoice.yaml", Parser.options().useObjects());
-trace(data.invoice); // 3483
-trace(data.ship_to.given); // Chris
-trace(Reflect.field(data, "457")); // true
+	function parsingExample()
+	{
+		#if sys
+		// Load and parse our invoice document. Use dynamic objects for key => value containers.
+		// This option will stringify all keys but is useful for mapping to typedefs.
+		var data:Dynamic = Yaml.read("invoice.yaml", Parser.options().useObjects());
+		trace(data.invoice); // 3483
+		trace(data.ship_to.given); // Chris
+		trace(Reflect.field(data, "457")); // true
 
-// Load and parse the same document using yaml.util.ObjectMap for key => value containers.
-// Using this default option allows for complex key types and a slightly nicer api to iterate keys/values.
-var data:AnyObjectMap = Yaml.read("invoice.yaml", Parser.options().useMaps()); // Same as Yaml.read("invoice.yaml");
-trace(data.get("tax")); // 251.42
-trace(data.get(457)); // true
+		// Load and parse the same document using yaml.util.ObjectMap for key => value containers.
+		// Using this default option allows for complex key types and a slightly nicer api to iterate keys/values.
+		var data:AnyObjectMap = Yaml.read("invoice.yaml", Parser.options().useMaps()); // Same as Yaml.read("invoice.yaml");
+		trace(data.get("tax")); // 251.42
+		trace(data.get(457)); // true
+		#end
+	}
 
-// RENDERING
+	function renderingExample()
+	{
+		var data = {name:Chris, costs:[{rice:2.34}, {milk:1.22}]};
 
-var data = {name:Chris, costs:[{rice:2.34}, {milk:1.22}]};
+		// Render an object tree as a yaml document.
+		var document = Yaml.render(data);
+		trace(document);
 
-// Render an object tree as a yaml document.
-var document = Yaml.render(data);
-trace(document);
+		// output
+		//  name: Chris
+		//  costs:
+		//      - rice: 2.34
+		//      - milk: 1.22
 
-// output
-name: Chris
-costs: 
-	- rice: 2.34
-	- milk: 1.22
-
-// This time write that same document to disk and adjust the flow level giving a more compact result.
-Yaml.write("expenses.yaml", data, Renderer.options().setFlowLevel(1));
+		#if sys
+		// This time write that same document to disk and adjust the flow level giving a more compact result.
+		Yaml.write("expenses.yaml", data, Renderer.options().setFlowLevel(1));
+		#end
+	}
+}
 ```
 
-`expenses.yaml`
+#### expenses.yaml
 
 ``` yml
 name: Chris
@@ -89,7 +105,7 @@ costs: [{rice: 2.34}, {milk: 1.22}]
 
 #### Parsing
 
-``` haxe
+``` none
 // Parse a single yaml document into object form
 yaml.Yaml.parse(document:String, ?options:ParserOptions):Dynamic
 
@@ -105,7 +121,7 @@ yaml.Parser.ParserOptions:
 
 #### Rendering
 
-``` haxe
+``` none
 // Render a yaml object graph as a yaml document
 yaml.Yaml.render(data:Dynamic, ?options:RenderOptions):String
 
