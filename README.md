@@ -41,7 +41,7 @@ comments: >
 
 `Example.hx`
 
-``` haxe
+``` haXe
 import yaml.Yaml;
 import yaml.util.ObjectMap;
 
