@@ -54,7 +54,7 @@ class Main
 		renderingExample();
 	}
 
-	function parsingExample()
+	static function parsingExample()
 	{
 		#if sys
 		// Load and parse our invoice document. Use dynamic objects for key => value containers.
@@ -72,7 +72,7 @@ class Main
 		#end
 	}
 
-	function renderingExample()
+	static function renderingExample()
 	{
 		var data = {name:Chris, costs:[{rice:2.34}, {milk:1.22}]};
 
