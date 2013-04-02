@@ -59,27 +59,26 @@ class Main
 	static function parsingExample()
 	{
 		#if sys
-		// Load and parse our invoice document. Use dynamic objects for key => value containers.
+		// Load and parse our invoice document using yaml.util.ObjectMap for key => value containers.
+		// Using this default option allows for complex key types and a slightly nicer api to 
+		// iterate keys/values. 
+		// Equivalent to Yaml.read("invoice.yaml", Parser.options().useMaps());
+		var data:AnyObjectMap = Yaml.read("invoice.yaml"); 
+
+		trace(data.get("tax")); // 251.42
+		trace(data.get(457)); // true
+		
+		// Load and parse the same document this time using dynamic objects for key => value containers.
 		// This option will stringify all keys but is useful for mapping to typedefs.
-		var data = Yaml.read("resource/invoice.yaml", Parser.options().useObjects());
+		var data = Yaml.read("invoice.yaml", Parser.options().useObjects());
 		
 		trace(data.invoice); // 3483
 		trace(data.ship_to.given); // Chris
 		trace(Reflect.field(data, "457")); // true
-
-		// Load and parse the same document using yaml.util.ObjectMap for key => value containers.
-		// Using this default option allows for complex key types and a slightly nicer api to 
-		// iterate keys/values. 
-		// Equivalent to Yaml.read("resource/invoice.yaml", Parser.options().useMaps());
-		var data:AnyObjectMap = Yaml.read("invoice.yaml"); 
-		
-		trace(data.get("tax")); // 251.42
-		trace(data.get(457)); // true
 		#end
 		
 		// If you already have the yaml document in string form you can parse it directly
-		var document = "key: value";
-		var data = Yaml.parse(document);
+		var data = Yaml.parse("key: value");
 		
 		trace(data.get("key")); // value
 	}
