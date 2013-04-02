@@ -44,11 +44,13 @@ comments: >
 
 ``` haxe
 import yaml.Yaml;
+import yaml.Parser;
+import yaml.Renderer;
 import yaml.util.ObjectMap;
 
-class Main 
+class Main
 {
-	static function main() 
+	static function main()
 	{
 		parsingExample();
 		renderingExample();
@@ -59,49 +61,50 @@ class Main
 		#if sys
 		// Load and parse our invoice document. Use dynamic objects for key => value containers.
 		// This option will stringify all keys but is useful for mapping to typedefs.
-		var data:Dynamic = Yaml.read("invoice.yaml", Parser.options().useObjects());
+		var data = Yaml.read("resource/invoice.yaml", Parser.options().useObjects());
 		trace(data.invoice); // 3483
 		trace(data.ship_to.given); // Chris
 		trace(Reflect.field(data, "457")); // true
 
 		// Load and parse the same document using yaml.util.ObjectMap for key => value containers.
-		// Using this default option allows for complex key types and a slightly 
-		// nicer api to iterate keys/values.
-		// Equivalent to Yaml.read("invoice.yaml", Parser.options().useMaps()); 
-		var data:AnyObjectMap = Yaml.read("invoice.yaml");
+		// Using this default option allows for complex key types and a slightly nicer api to iterate keys/values.
+		var data:AnyObjectMap = Yaml.read("resource/invoice.yaml", Parser.options().useMaps()); // Same as Yaml.read("invoice.yaml");
 		trace(data.get("tax")); // 251.42
 		trace(data.get(457)); // true
 		#end
+		
+		// If you already have the yaml document in string form you can parse it directly
+		var document = "key: value";
+		var data = Yaml.parse(document);
+		trace(data.get("key")); // value
 	}
 
 	static function renderingExample()
 	{
-		var data = {name:Chris, costs:[{rice:2.34}, {milk:1.22}]};
+		var receipt = {assistant:"Chris", items:[{rice:2.34}, {milk:1.22}]};
 
 		// Render an object tree as a yaml document.
-		var document = Yaml.render(data);
+		var document = Yaml.render(receipt);
 		trace(document);
 
-		// output
-		//  name: Chris
-		//  costs:
+		//  assistant: Chris
+		//  items:
 		//      - rice: 2.34
 		//      - milk: 1.22
 
 		#if sys
-		// This time write that same document to disk and adjust the flow level 
-		// producing a more compact result.
-		Yaml.write("expenses.yaml", data, Renderer.options().setFlowLevel(1));
+		// This time write that same document to disk and adjust the flow level giving a more compact result.
+		Yaml.write("receipt.yaml", receipt, Renderer.options().setFlowLevel(1));
 		#end
 	}
 }
 ```
 
-#### expenses.yaml
+#### receipt.yaml
 
 ``` yml
-name: Chris
-costs: [{rice: 2.34}, {milk: 1.22}]
+assistant: Chris
+items: [{rice: 2.34}, {milk: 1.22}]
 ```
 
 ## API
