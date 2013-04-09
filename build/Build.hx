@@ -13,7 +13,7 @@ class Build extends mtask.core.BuildBase
 		t.description = "A cross platform YAML 1.2 parser and renderer for Haxe.";
 		t.url = "https://github.com/mikestead/hx-yaml";
 		t.license = HaxeLibLicense.MIT;
-		t.versionDescription = "Fix issue under neko when parsing into dynamic objects.";
+		t.versionDescription = "Move all util classes into yaml.util package.";
 		t.username = "mikestead";
 		
 		t.addTag("cross");

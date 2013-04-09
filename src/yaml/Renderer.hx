@@ -8,8 +8,8 @@ import haxe.io.Bytes;
 import yaml.YamlType;
 import yaml.schema.DefaultSchema;
 import yaml.schema.SafeSchema;
-import mcore.util.Strings;
-import mcore.util.Ints;
+import yaml.util.Strings;
+import yaml.util.Ints;
 
 import yaml.YamlException;
 

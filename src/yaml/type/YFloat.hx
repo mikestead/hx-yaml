@@ -1,7 +1,7 @@
 package yaml.type;
 
 import yaml.YamlType;
-import mcore.util.Floats;
+import yaml.util.Floats;
 
 class YFloat extends yaml.StringYamlType<Null<Float>>
 {

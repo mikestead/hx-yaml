@@ -20,50 +20,21 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package mcore.util;
+package yaml.util;
 
 /**
-Utility methods for working with float values.
+Utility methods for working with strings.
 */
-class Floats
+class Strings
 {
 	/**
-	Returns the string representation of a float.
-	
-	Under cpp will convert large floats with a positive exponent (eg date.getTime()) to a decimal string.
-		e.g 1.347420344e+12 -> 1347420344000
+	Concatenate a source string with itself N number of times.
 	*/
-	public static function toString(value:Float):String
+	public static function repeat(source:String, times:Int):String
 	{
-		#if cpp
-		var str = Std.string(value);
-		if (str.indexOf("e+") != -1)
-		{
-			var parts = str.split(".");
-			var exp = parts[1].split("e+");
-			str = parts[0] + StringTools.rpad(exp[0], "0", Std.parseInt(exp[1]));
-		}
-		return str;
-		#else
-		return Std.string(value);
-		#end
-	}
-
-	/**
-	Rounds a value to a specific decimal precision
-	
-	Example:
-	<pre>
-	FloatUtil.round(1.6666667 3);//returns 1.667;
-	</pre>
-
-	@param value 		value to round
-	@param precision 	precision in decimals
-	@return the rounded value
-	*/
-	static public function round(value:Float, precision:Int):Float
-	{
-		value = value * Math.pow(10, precision);
-		return Math.round(value) / Math.pow(10, precision);
+		var result = "";
+		for (i in 0...times)
+			result += source;
+		return result;
 	}
 }

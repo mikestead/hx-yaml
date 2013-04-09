@@ -9,8 +9,8 @@ import haxe.PosInfos;
 import yaml.schema.DefaultSchema;
 import yaml.schema.SafeSchema;
 import yaml.YamlType;
-import mcore.util.Strings;
-import mcore.util.Ints;
+import yaml.util.Strings;
+import yaml.util.Ints;
 
 class ParserOptions
 {

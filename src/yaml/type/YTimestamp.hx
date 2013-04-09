@@ -125,7 +125,7 @@ class YTimestamp extends YamlType<Date, String>
 	override public function represent(object:Date, ?style:String):String
 	{
 		#if (flash || js)
-		return mcore.util.Dates.toISOString(object);
+		return yaml.util.Dates.toISOString(object);
 		#else
 		trace("Warning: UTC dates are not supported under this target");
 		return object.toString();
