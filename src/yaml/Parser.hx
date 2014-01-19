@@ -1995,7 +1995,7 @@ class Parser
 	};
 
 	#if neko
-	public static var PATTERN_NON_PRINTABLE         = ~/[\x{00}-\x{08}\x{0B}\x{0C}\x{0E}-\x{1F}\x{7F}-\x{84}\x{86}-\x{9F}\x{D800}-\x{DFFF}\x{FFFE}\x{FFFF}]/u;
+	public static var PATTERN_NON_PRINTABLE         = ~/[\x{00}-\x{08}\x{0B}\x{0C}\x{0E}-\x{1F}\x{7F}-\x{84}\x{86}-\x{9F}\x{FFFE}\x{FFFF}]/u;
 	#elseif (js || flash9 || java)
 	public static var PATTERN_NON_PRINTABLE         = ~/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F-\x84\x86-\x9F\uD800-\uDFFF\uFFFE\uFFFF]/u;	
 	#else
