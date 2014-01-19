@@ -13,7 +13,7 @@ class Build extends mtask.core.BuildBase
 		t.description = "A cross platform YAML 1.2 parser and renderer for Haxe.";
 		t.url = "https://github.com/mikestead/hx-yaml";
 		t.license = HaxeLibLicense.MIT;
-		t.versionDescription = "Add haxelib.json in prep for release to new haxelib.";
+		t.versionDescription = "Fix invalid regex unicode point under PCRE.";
 		t.username = "mikestead";
 		
 		t.addTag("cross");

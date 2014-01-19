@@ -4,8 +4,8 @@
 	"tags": ["cross","utility"],
 	"description": "A cross platform YAML 1.2 parser and renderer for Haxe.",
 	"contributors": ["mikestead"],
-	"releasenote": "Add haxelib.json in prep for release to new haxelib.",
-	"version": "1.1.7",
+	"releasenote": "Fix invalid regex unicode point under PCRE.",
+	"version": "1.1.8",
 	"url": "https://github.com/mikestead/hx-yaml",
 	"dependencies": 
 	{

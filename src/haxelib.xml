@@ -1,7 +1,7 @@
 <project name="yaml" url="https://github.com/mikestead/hx-yaml" license="MIT">
 	<user name="mikestead"/>
 	<description><![CDATA[A cross platform YAML 1.2 parser and renderer for Haxe.]]></description>
-	<version name="1.1.7"><![CDATA[Add haxelib.json in prep for release to new haxelib.]]></version>
+	<version name="1.1.8"><![CDATA[Fix invalid regex unicode point under PCRE.]]></version>
 	<tag v="cross"/>
 	<tag v="utility"/>
 </project>
