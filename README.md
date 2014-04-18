@@ -1,7 +1,7 @@
 # Overview
 
-A cross platform [YAML](http://www.yaml.org/) 1.2 parser and renderer for Haxe. Ported from the feature rich
-[js-yaml](https://github.com/nodeca/js-yaml). Currently supports JavaScript, Flash (as3) and Neko 2.0+.
+A cross platform [YAML](http://www.yaml.org/) 1.2 parser and renderer for Haxe 3+. Ported from the feature rich
+[js-yaml](https://github.com/nodeca/js-yaml). Currently supports JavaScript, Flash (as3), CPP and Neko 2.0+.
 
 ### Installation
 
@@ -187,15 +187,15 @@ The list of standard YAML tags and corresponding Haxe types. See also
 !!map { ... }               # yaml.util.ObjectMap
 ```
 
-When parsing maps, [yaml.util.ObjectMap](https://github.com/mikestead/hx-yaml/blob/master/src/yaml/util/ObjectMap.hx) 
+When parsing into maps, [yaml.util.ObjectMap](https://github.com/mikestead/hx-yaml/blob/master/src/yaml/util/ObjectMap.hx) 
 is used. Under Haxe 3.0 `haxe.ds.ObjectMap` *would* be used but it doesn't support primitive
 keys on all targets and we need a map which can contain a mixture of key types.
 
 ## Limitations
 
-- Under Neko UTC date translation is not yet possible so dates will be represented in local time instead.
+- Under CPP and Neko UTC date translation is not yet possible so dates will be represented in local time instead.
 - Requires Neko 2.0+ when used under the Neko runtime due to its support for Unicode based regular expressions.
-- CPP does not yet support Unicode based regular expressions so is not yet a supported target.
+- CPP support requires Haxe 3.1.2+ and hxcpp 3.0.2+
 
 ## License
 
