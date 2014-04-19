@@ -4,8 +4,8 @@
 	"tags": ["cross","utility"],
 	"description": "A cross platform YAML 1.2 parser and renderer for Haxe.",
 	"contributors": ["mikestead"],
-	"releasenote": "Fix invalid regex unicode point under PCRE.",
-	"version": "1.1.8",
+	"releasenote": "See https://github.com/mikestead/hx-yaml/blob/master/CHANGES.md",
+	"version": "1.2.0",
 	"url": "https://github.com/mikestead/hx-yaml",
 	"dependencies": 
 	{
