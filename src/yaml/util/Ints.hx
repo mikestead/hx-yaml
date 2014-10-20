@@ -113,7 +113,7 @@ class Ints
 		
 		#elseif flash8
 		
-		var v = _global["parseInt"](x, radix);
+		var v = _global["parseInt"](value, radix);
 		return _global["isNaN"](v) ? null : v;
 		
 		#else // do the conversion ourselves
