@@ -1,7 +1,7 @@
 <project name="yaml" url="https://github.com/mikestead/hx-yaml" license="MIT">
 	<user name="mikestead"/>
 	<description><![CDATA[A cross platform YAML 1.2 parser and renderer for Haxe.]]></description>
-	<version name="1.2.0"><![CDATA[See https://github.com/mikestead/hx-yaml/blob/master/CHANGES.md]]></version>
+	<version name="1.2.1"><![CDATA[See https://github.com/mikestead/hx-yaml/blob/master/CHANGES.md]]></version>
 	<tag v="cross"/>
 	<tag v="utility"/>
 </project>
