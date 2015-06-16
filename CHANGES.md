@@ -1,3 +1,7 @@
+## 1.2.2
+
+- [#7](https://github.com/mikestead/hx-yaml/pull/7) Added test dependencies.
+
 ## 1.2.1
 
 - [#5](https://github.com/mikestead/hx-yaml/pull/5) Update Ints.hx.
