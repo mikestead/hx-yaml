@@ -1,3 +1,8 @@
+## 1.3.0
+
+- [#14](https://github.com/mikestead/hx-yaml/pull/13) Don't #error during completion
+- [#13](https://github.com/mikestead/hx-yaml/pull/13) Fix crash inside ObjectMap on SWF target
+
 ## 1.2.2
 
 - [#7](https://github.com/mikestead/hx-yaml/pull/7) Added test dependencies.
