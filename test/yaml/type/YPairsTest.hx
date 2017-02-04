@@ -8,14 +8,16 @@ class YPairsTest
 {
 	var type:YPairs;
 
+	public function new() {}
+
 	@Before
-	public function before()
+	public function setup()
 	{
 		type = new YPairs();
 	}
 
 	@Test
-	public function shouldAllowValidPair()
+	public function testShouldAllowValidPair()
 	{
 		var value:Array<AnyObjectMap> = [map("key01", "value01"), map("key02", "value02")];
 		shouldPass(value);
@@ -28,7 +30,7 @@ class YPairsTest
 	}
 
 	@Test
-	public function shouldFailInvalidOmap()
+	public function testShouldFailInvalidOmap()
 	{
 		var m = map("key01", "value01");
 		m.set("key02", "value02");
@@ -40,13 +42,13 @@ class YPairsTest
 	{
 		var result = type.resolve(value);
 		Assert.areEqual(value.length, result.length);
-		
+
 		for (i in 0...value.length)
 		{
 			var key = null;
 			for (k in value[i].keys())
 				key = k;
-			
+
 			Assert.areEqual(result[i][0], key);
 			Assert.areEqual(result[i][1], value[i].get(key));
 		}
@@ -58,7 +60,9 @@ class YPairsTest
 			type.resolve(value);
 			Assert.fail("Expected failure of pairs resolution but succeeded. " + value);
 		}
-		catch(e:ResolveTypeException) {}
+		catch(e:ResolveTypeException) {
+			Assert.isTrue(true);
+		}
 	}
 
 	function map(key:Dynamic, value:Dynamic):AnyObjectMap

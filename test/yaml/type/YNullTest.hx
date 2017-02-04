@@ -7,20 +7,22 @@ class YNullTest
 {
 	var type:YNull;
 
+	public function new() {}
+
 	@Before
-    public function before()
+    public function setup()
 	{
 		type = new YNull();
 	}
 
 	@Test
-	public function shouldResolveNull()
+	public function testShouldResolveNull()
 	{
 		Assert.isNull(type.resolve("null"));
 		Assert.isNull(type.resolve("Null"));
 		Assert.isNull(type.resolve("NULL"));
 		Assert.isNull(type.resolve("~"));
-		
+
 		try {
 			type.resolve("some value");
 			Assert.fail("Should not resolve non-null value");
@@ -30,7 +32,7 @@ class YNullTest
 	}
 
 	@Test
-	public function shouldRepresentNull()
+	public function testShouldRepresentNull()
 	{
 		Assert.areEqual("~", type.represent(null, "canonical"));
 		Assert.areEqual("null", type.represent(null, "lowercase"));

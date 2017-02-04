@@ -50,4 +50,31 @@
 #-D HXCPP_M64
 -cpp bin/cpp_test
 
+--next
 
+## PHP7
+-main TestPhp
+-lib hamcrest
+-lib utest
+-cp src
+-resource resource/small_sample.yaml@small
+-resource resource/sample.yaml@large
+
+-cp test/munit_compat
+-cp test
+-D php7
+-php bin/php7
+
+--next
+
+## PHP
+-main TestPhp
+-lib hamcrest
+-lib utest
+-cp src
+-resource resource/small_sample.yaml@small
+-resource resource/sample.yaml@large
+
+-cp test/munit_compat
+-cp test
+-php bin/php
