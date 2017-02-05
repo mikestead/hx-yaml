@@ -8,14 +8,16 @@ class YIntTest
 
 	var type:YInt;
 
+	public function new() {}
+
 	@Before
-    public function before()
+    public function setup()
 	{
 		type = new YInt();
 	}
 
 	@Test
-	public function shouldResolveInt()
+	public function testShouldResolveInt()
 	{
 		var canonical = "685230";
 		var decimal = "+685_230";
@@ -25,7 +27,7 @@ class YIntTest
 		var binaryA = "0b1010_0111_0100_1010_1110";
 		var binaryB = "0b10100111010010101110";
 		var sexagesimal = "190:20:30";
-		
+
 		Assert.areEqual(CONST, type.resolve(canonical));
 		Assert.areEqual(CONST, type.resolve(decimal));
 		Assert.areEqual(CONST, type.resolve(octal));
@@ -37,7 +39,7 @@ class YIntTest
 	}
 
 	@Test
-	public function shouldRepresentInt()
+	public function testShouldRepresentInt()
 	{
 		Assert.areEqual("0b10100111010010101110", type.represent(CONST, "binary"));
 		Assert.areEqual("02472256", type.represent(CONST, "octal"));

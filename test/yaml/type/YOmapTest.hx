@@ -8,8 +8,10 @@ class YOmapTest
 {
 	var type:YOmap;
 
+	public function new() {}
+
 	@Before
-	public function before()
+	public function setup()
 	{
 		type = new YOmap();
 	}
@@ -18,7 +20,7 @@ class YOmapTest
 	@Ignore("CPP seems to be passing arrays by value(?) so comparison check fails")
 	#end
 	@Test
-    public function shouldAllowValidOmap()
+    public function testShouldAllowValidOmap()
 	{
 		var value:Array<AnyObjectMap> = [map("key01", "value01"), map("key02", "value02")];
 		shouldPass(value);
@@ -26,9 +28,9 @@ class YOmapTest
 		var value:Array<AnyObjectMap> = [map("key01", null), map("key02", null)];
 		shouldPass(value);
 	}
-	
+
 	@Test
-	public function shouldFailInvalidOmap()
+	public function testShouldFailInvalidOmap()
 	{
 		var value:Array<AnyObjectMap> = [map("key01", "value01"), map("key01", "value02")];
 		shouldFail(value);
@@ -50,7 +52,9 @@ class YOmapTest
 			type.resolve(value);
 			Assert.fail("Expected failure of omap resolution but succeeded. " + value);
 		}
-		catch(e:ResolveTypeException) {}
+		catch(e:ResolveTypeException) {
+			Assert.isTrue(true);
+		}
 	}
 
 	function map(key:Dynamic, value:Dynamic):AnyObjectMap

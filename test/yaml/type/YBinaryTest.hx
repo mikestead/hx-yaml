@@ -5,8 +5,10 @@ import massive.munit.Assert;
 
 class YBinaryTest
 {
+	public function new() {}
+
 	@Test
-	public function shouldResolveAndRepresentBinary()
+	public function testShouldResolveAndRepresentBinary()
 	{
 		var type = new YBinary();
 		var data:Bytes = cast type.resolve(createValue());
