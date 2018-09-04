@@ -4,10 +4,10 @@ import haxe.PosInfos;
 
 class YamlException
 {
-	public var name(get_name, null):String;
+	public var name(get, null):String;
 	function get_name():String { return name; }
 
-	public var message(get_message, null):String;
+	public var message(get, null):String;
 	function get_message():String { return message; }
 
 	public var cause(default, null):Dynamic;
