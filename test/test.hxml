@@ -5,6 +5,7 @@
 -cp src
 -resource resource/small_sample.yaml@small
 -resource resource/sample.yaml@large
+-D no-deprecation-warnings
 
 -cp test
 -swf-version 9
@@ -19,6 +20,7 @@
 -cp src
 -resource resource/small_sample.yaml@small
 -resource resource/sample.yaml@large
+-D no-deprecation-warnings
 
 -cp test
 -js bin/js_test.js
@@ -32,6 +34,7 @@
 -cp src
 -resource resource/small_sample.yaml@small
 -resource resource/sample.yaml@large
+-D no-deprecation-warnings
 
 -cp test
 -neko bin/neko_test.n
@@ -45,6 +48,7 @@
 -cp src
 -resource resource/small_sample.yaml@small
 -resource resource/sample.yaml@large
+-D no-deprecation-warnings
 
 -cp test
 #-D HXCPP_M64
