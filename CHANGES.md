@@ -1,7 +1,15 @@
+## 2.0.0
+
+- [#18](https://github.com/mikestead/hx-yaml/pull/18) Fix compatibility with
+  latest Haxe 4
+- [#17](https://github.com/mikestead/hx-yaml/pull/17) required by haxe v.4 (dev)
+
 ## 1.3.0
 
-- [#14](https://github.com/mikestead/hx-yaml/pull/13) Don't #error during completion
-- [#13](https://github.com/mikestead/hx-yaml/pull/13) Fix crash inside ObjectMap on SWF target
+- [#14](https://github.com/mikestead/hx-yaml/pull/13) Don't #error during
+  completion
+- [#13](https://github.com/mikestead/hx-yaml/pull/13) Fix crash inside ObjectMap
+  on SWF target
 
 ## 1.2.2
 

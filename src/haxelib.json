@@ -10,7 +10,7 @@
 	"mikestead"
 ],
 	"releasenote": "See https://github.com/mikestead/hx-yaml/blob/master/CHANGES.md",
-	"version": "1.3.0",
+	"version": "2.0.0",
 	"url": "https://github.com/mikestead/hx-yaml",
 	"dependencies": 
 	{
