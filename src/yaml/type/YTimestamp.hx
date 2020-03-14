@@ -116,7 +116,11 @@ class YTimestamp extends YamlType<Date, String>
 		#elseif flash
 		return untyped _global["Date"];
 		#elseif js
+		#if haxe4
+		return js.Syntax.code("Date");
+		#else
 		return untyped __js__("Date");
+		#end
 		#end
 		return null;
 	}
