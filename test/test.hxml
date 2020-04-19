@@ -1,3 +1,15 @@
+## Interp
+-main TestMain
+-lib munit
+-lib hamcrest
+-cp src
+-cp test
+-resource resource/small_sample.yaml@small
+-resource resource/sample.yaml@large
+--interp
+
+--next
+
 ## Flash 9+
 -main TestMain
 -lib munit
@@ -54,4 +66,14 @@
 #-D HXCPP_M64
 -cpp bin/cpp_test
 
+--next
 
+## LUA
+-main TestMain
+-lib munit
+-lib hamcrest
+-cp src
+-resource resource/small_sample.yaml@small
+-resource resource/sample.yaml@large
+-cp test
+-lua lua.lua

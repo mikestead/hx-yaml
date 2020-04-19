@@ -1,11 +1,9 @@
 package yaml.type;
 
 import haxe.io.Bytes;
-import haxe.Utf8;
 import yaml.YamlType;
 
-class YBinary extends yaml.StringYamlType<Bytes>
-{
+class YBinary extends yaml.StringYamlType<Bytes> {
 	static inline var BASE64_PADDING_CODE = 0x3D;
 	static inline var BASE64_PADDING_CHAR = '=';
 
@@ -21,42 +19,38 @@ class YBinary extends yaml.StringYamlType<Bytes>
 	];
 
 	static var BASE64_CHARTABLE = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'.split('');
-	
-	public function new()
-	{
-		super('tag:yaml.org,2002:binary', {kind:"string"}, {kind:"binary", instanceOf:Bytes});
+
+	public function new() {
+		super('tag:yaml.org,2002:binary', {kind: "string"}, {kind: "binary", instanceOf: Bytes});
 	}
 
-	override public function resolve(object:String, ?usingMaps:Bool = true, ?explicit:Bool):Bytes
-	{
-		var length = Utf8.length(object);
+	override public function resolve(object:String, ?usingMaps:Bool = true, ?explicit:Bool):Bytes {
+		var length = object.length;
 		var idx = 0;
 		var result = [];
 		var leftbits = 0; // number of bits decoded, but yet to be appended
 		var leftdata = 0; // bits decoded, but yet to be appended
 
 		// Convert one by one.
-		for (idx in 0...length) 
-		{
-			var code = Utf8.charCodeAt(object, idx);
+		for (idx in 0...length) {
+			var code = object.charCodeAt(idx);
 			var value = BASE64_BINTABLE[code & 0x7F];
 
 			// Skip LF(NL) || CR
-			if (0x0A != code && 0x0D != code) 
-			{
+			if (0x0A != code && 0x0D != code) {
 				// Fail on illegal characters
 				if (-1 == value)
 					return cantResolveType();
 
-					// Collect data into leftdata, update bitcount
+				// Collect data into leftdata, update bitcount
 				leftdata = (leftdata << 6) | value;
 				leftbits += 6;
-			
-					// If we have 8 or more bits, append 8 bits to the result
+
+				// If we have 8 or more bits, append 8 bits to the result
 				if (leftbits >= 8) {
 					leftbits -= 8;
-			
-						// Append if not padding.
+
+					// Append if not padding.
 					if (BASE64_PADDING_CODE != code) {
 						result.push((leftdata >> leftbits) & 0xFF);
 					}
@@ -69,23 +63,21 @@ class YBinary extends yaml.StringYamlType<Bytes>
 		// If there are any bits left, the base64 string was corrupted
 		if (leftbits != 0)
 			cantResolveType();
-		
+
 		var bytes = Bytes.alloc(result.length);
 		for (i in 0...result.length)
 			bytes.set(i, result[i]);
-		
+
 		return bytes;
 	}
 
-	override public function represent(object:Bytes, ?style:String):String
-	{
+	override public function represent(object:Bytes, ?style:String):String {
 		var result = '';
 		var index = 0;
 		var max = object.length - 2;
 
 		// Convert every three bytes to 4 ASCII characters.
-		while (index < max)
-		{
+		while (index < max) {
 			result += BASE64_CHARTABLE[object.get(index + 0) >> 2];
 			result += BASE64_CHARTABLE[((object.get(index + 0) & 0x03) << 4) + (object.get(index + 1) >> 4)];
 			result += BASE64_CHARTABLE[((object.get(index + 1) & 0x0F) << 2) + (object.get(index + 2) >> 6)];
@@ -96,24 +88,20 @@ class YBinary extends yaml.StringYamlType<Bytes>
 		var rest = object.length % 3;
 
 		// Convert the remaining 1 or 2 bytes, padding out to 4 characters.
-		if (0 != rest)
-		{
+		if (0 != rest) {
 			index = object.length - rest;
 			result += BASE64_CHARTABLE[object.get(index + 0) >> 2];
 
-			if (2 == rest) 
-			{
+			if (2 == rest) {
 				result += BASE64_CHARTABLE[((object.get(index + 0) & 0x03) << 4) + (object.get(index + 1) >> 4)];
 				result += BASE64_CHARTABLE[(object.get(index + 1) & 0x0F) << 2];
 				result += BASE64_PADDING_CHAR;
-			} 
-			else
-			{
+			} else {
 				result += BASE64_CHARTABLE[(object.get(index + 0) & 0x03) << 4];
 				result += BASE64_PADDING_CODE + BASE64_PADDING_CHAR;
 			}
 		}
-		
+
 		return result;
 	}
 }
