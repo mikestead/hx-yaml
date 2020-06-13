@@ -22,7 +22,7 @@ class Yaml
 		return new Parser().parse(document, options);
 	}
 
-	#if sys
+	#if (sys || nodejs)
 	/**
 	Read a yaml document from disk and parse into object form.
 	
@@ -51,7 +51,7 @@ class Yaml
 		return new Renderer().render(data, options);
 	}
 
-	#if sys
+	#if (sys || nodejs)
 	/**
 	Render an object graph as a yaml text document and write it to disk.
 	
