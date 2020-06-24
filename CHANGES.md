@@ -1,3 +1,8 @@
+## 2.0.1
+
+- [#26](https://github.com/mikestead/hx-yaml/pull/26) Yaml.read/write: 
+  improve support for Node.js
+
 ## 2.0.0
 
 - [#18](https://github.com/mikestead/hx-yaml/pull/18) Fix compatibility with
