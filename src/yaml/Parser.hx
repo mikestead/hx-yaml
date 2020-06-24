@@ -1980,9 +1980,13 @@ class Parser
 	
 	static function createUtf8Char(hex:Int):String
 	{
+		#if haxe4
+		return String.fromCharCode(hex);
+		#else
 		var utf8 = new Utf8(1);
 		utf8.addChar(hex);
 		return utf8.toString();
+		#end
 	}
 
 	public static var HEXADECIMAL_ESCAPE_SEQUENCES:IntMap<Int> = 
