@@ -1855,11 +1855,6 @@ class Parser
 		composeNode(lineIndent - 1, CONTEXT_BLOCK_OUT, false, true);
 		skipSeparationSpace(true, -1);
 
-		if (validate && checkLineBreaks && PATTERN_NON_ASCII_LINE_BREAKS.match(yaml.util.Utf8.substring(input, documentStart, position)))
-		{
-			throwWarning('non-ASCII line breaks are interpreted as content');
-		}
-
 		output(result);
 
 		if (position == lineStart && testDocumentSeparator())
@@ -1988,12 +1983,6 @@ class Parser
 		hash.set(CHAR_CAPITAL_U, 8);
 		hash;
 	};
-	
-	#if (eval || neko || cpp || hl || display)
-	public static var PATTERN_NON_ASCII_LINE_BREAKS = ~/[\x{85}\x{2028}\x{2029}]/u;
-	#elseif (js || flash9 || java)
-	public static var PATTERN_NON_ASCII_LINE_BREAKS = ~/[\x85\u2028\u2029]/u;
-	#end
 	
 	public static var PATTERN_FLOW_INDICATORS       = ~/[,\[\]\{\}]/u;
 	public static var PATTERN_TAG_HANDLE            = ~/^(?:!|!!|![a-z\-]+!)$/iu;
