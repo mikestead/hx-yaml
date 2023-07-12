@@ -1989,9 +1989,9 @@ class Parser
 		hash;
 	};
 	
-	#if (js || flash9 || java)
+	#if (eval || neko || cpp || hl || display)
 	public static var PATTERN_NON_ASCII_LINE_BREAKS = ~/[\x{85}\x{2028}\x{2029}]/u;
-	#else
+	#elseif (js || flash9 || java)
 	public static var PATTERN_NON_ASCII_LINE_BREAKS = ~/[\x85\u2028\u2029]/u;
 	#end
 	
